@@ -4,8 +4,9 @@ export interface IUser {
     username: string;
     id: string;
     avatar: string;
-    isGuestUser: boolean;
-    isBlogOwner: boolean;
+    isGuestUser?: boolean;
+    isBlogOwner?: boolean;
+    token: string;
 }
 
 export const authStore = {

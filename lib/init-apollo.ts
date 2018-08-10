@@ -9,14 +9,15 @@ import { merge } from 'lodash';
 let apolloClient = null;
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-    // add the authorization to the headers
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: `Bearer ${localStorage.getItem('jwt') || ''}`,
-      } 
-    }));
-  
+    if(localStorage.getItem('jwt')){
+        operation.setContext(({ headers = {} }) => ({
+            headers: {
+              ...headers,
+              authorization: `Bearer ${localStorage.getItem('jwt') || ''}`,
+            } 
+          }));
+    }
+   
     return forward(operation);
   })
   
