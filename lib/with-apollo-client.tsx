@@ -23,6 +23,8 @@ export default ComposedComponent => {
                 }
             };
 
+            console.log('Init');
+
             // Evaluate the composed component's getInitialProps()
             let composedInitialProps = {};
             if (ComposedComponent.getInitialProps) {
@@ -78,10 +80,13 @@ export default ComposedComponent => {
 
         constructor(props) {
             super(props);
-            this.apollo = initApollo(props.serverState.apollo.data);
+            console.log('constructor');
+            console.log(props);
+            this.apollo = initApollo(props.serverState ? props.serverState.apollo.data : undefined);
         }
 
         render() {
+            console.log('WIth render')
             return (
                 <ApolloProvider client={this.apollo}>
                     <ComposedComponent {...this.props} />

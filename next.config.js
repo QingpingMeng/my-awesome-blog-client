@@ -5,43 +5,56 @@ const path = require('path');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const port = parseInt(process.env.PORT, 10) || 3000;
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { ANALYZE } = process.env;
 
 const alias = {
-  'pages': path.resolve(__dirname, './pages'),
-  'libs': path.resolve(__dirname, './libs'),
-  'types': path.resolve(__dirname, './types'),
-  'static': path.resolve(__dirname, './static'),
-  'style': path.resolve(__dirname, './style'),
-  'store': path.resolve(__dirname, './store'),
-  'components': path.resolve(__dirname, './components')
+    pages: path.resolve(__dirname, './pages'),
+    libs: path.resolve(__dirname, './libs'),
+    types: path.resolve(__dirname, './types'),
+    static: path.resolve(__dirname, './static'),
+    style: path.resolve(__dirname, './style'),
+    store: path.resolve(__dirname, './store'),
+    components: path.resolve(__dirname, './components')
 };
 
-module.exports = withTypescript(withSass(withImages({
-  inlineImageLimit: 10240,
-  webpack: (config, {dev, isServer}) => {
-    for (let p in alias) {
-      config.resolve.alias[p] = alias[p];
-    }
-    if (!dev) {
-      config.devtool = 'source-map';
-    }
-    if (dev && !isServer) {
-      config.plugins.push(new OpenBrowserPlugin({url: `http://localhost:${port}`}));
-    }
-    if (!dev) {
-      config.plugins.push(
-        new SWPrecacheWebpackPlugin({
-          verbose: true,
-          staticFileGlobsIgnorePatterns: [/\.next\//],
-          runtimeCaching: [
-            {
-              handler: 'networkFirst',
-              urlPattern: /^https?.*/
+module.exports = withTypescript(
+    withSass(
+        withImages({
+            inlineImageLimit: 10240,
+            publicRuntimeConfig: {
+                BUILD_ENV: process.env.BUILD_ENV
+            },
+            cssModules: true,
+            cssLoaderOptions: {
+                importLoaders: 1,
+                localIdentName: '[local]___[hash:base64:5]'
+            },
+            webpack: (config, { dev, isServer }) => {
+                for (let p in alias) {
+                    config.resolve.alias[p] = alias[p];
+                }
+                if (!dev) {
+                    config.devtool = 'source-map';
+                }
+                if (dev && !isServer) {
+                    config.plugins.push(
+                        new OpenBrowserPlugin({
+                            url: `http://localhost:${port}`
+                        })
+                    );
+                }
+                if (ANALYZE) {
+                    config.plugins.push(
+                        new BundleAnalyzerPlugin({
+                            analyzerMode: 'server',
+                            analyzerPort: isServer ? 8888 : 8889,
+                            openAnalyzer: true
+                        })
+                    );
+                }
+                return config;
             }
-          ]
         })
-      );
-    }
-    return config;
-  }
-})));
+    )
+);

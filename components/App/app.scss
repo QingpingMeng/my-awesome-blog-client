@@ -1,0 +1,16 @@
+.root {
+    display: grid;
+    grid-template-rows: 64px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    'header'
+    'mainview'
+}
+
+.mainview{
+    grid-area: mainview;
+}
+
+.header{
+    grid-area: header
+}
