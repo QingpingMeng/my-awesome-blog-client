@@ -41,4 +41,4 @@ const Component = () => (
     </App>
 );
 
-export default withApolloClient(Component);
+export default Component;

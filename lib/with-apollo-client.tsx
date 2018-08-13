@@ -80,13 +80,10 @@ export default ComposedComponent => {
 
         constructor(props) {
             super(props);
-            console.log('constructor');
-            console.log(props);
             this.apollo = initApollo(props.serverState ? props.serverState.apollo.data : undefined);
         }
 
         render() {
-            console.log('WIth render')
             return (
                 <ApolloProvider client={this.apollo}>
                     <ComposedComponent {...this.props} />

@@ -43,4 +43,4 @@ class Header extends React.Component<IHeaderProps, any> {
     }
 }
 
-export default withApolloClient(Header);
+export default Header;

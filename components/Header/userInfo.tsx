@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 import Avatar from '@material-ui/core/Avatar';
 import GithubSignin from '../SigninLink/github';
 import { Query } from 'react-apollo';
-import withApolloClient from '../../lib/with-apollo-client';
 
 const query = gql`
     query {
@@ -42,4 +41,4 @@ class UserInfo extends React.Component<IAppProps, any> {
   }
 }
 
-export default withApolloClient(UserInfo);
+export default (UserInfo);

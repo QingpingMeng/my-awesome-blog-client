@@ -23,4 +23,4 @@ class App extends React.Component<IAppProps, any> {
     }
 }
 
-export default App;
+export default  withApolloClient(App);
