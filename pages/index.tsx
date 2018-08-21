@@ -1,6 +1,5 @@
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import withApolloClient from '../lib/with-apollo-client';
 import App from '../components/App/app';
 import Link from 'next/link';
 

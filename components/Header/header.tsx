@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import UserInfo from './userInfo';
-import withApolloClient from '../../lib/with-apollo-client';
+import Link from 'next/link';
 
 Router.onRouteChangeStart = url => {
     console.log(`Loading: ${url}`);
@@ -36,6 +36,10 @@ class Header extends React.Component<IHeaderProps, any> {
                     >
                         My Awesome Blog
                     </Typography>
+                    <Link prefetch href="/articles/new">
+                        <Button>New Post </Button>
+                    </Link>
+
                     <UserInfo />
                 </Toolbar>
             </AppBar>
