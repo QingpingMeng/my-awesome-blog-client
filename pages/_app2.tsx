@@ -5,8 +5,8 @@ import withApollo from '../lib/with-apollo-client';
 
 class MyApp extends App<{apolloClient: any}> {
     render() {
-        console.log("_app render");
         const { Component, pageProps, apolloClient} = this.props;
+        console.log(apolloClient);
         return (
             <Container>
                 <ApolloProvider client={apolloClient}>
