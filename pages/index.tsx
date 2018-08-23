@@ -13,7 +13,6 @@ const PROFILE_QUERY = gql`
         }
     }
 `;
-console.log('Indx');
 const Component = () => (
     <App>
         <Query query={PROFILE_QUERY} fetchPolicy={'cache-and-network'}>

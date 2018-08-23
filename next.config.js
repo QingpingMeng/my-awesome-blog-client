@@ -3,8 +3,9 @@ const withSass = require('@zeit/next-sass');
 const withImages = require('next-images');
 const path = require('path');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = parseInt(process.env.PORT, 10) || 3001;
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { ANALYZE } = process.env;
 
@@ -30,7 +31,7 @@ module.exports = withTypescript(
                 importLoaders: 1,
                 localIdentName: '[local]___[hash:base64:5]'
             },
-            webpack: (config, { dev, isServer }) => {
+            webpack: (config, { dev, isServer, dir }) => {
                 for (let p in alias) {
                     config.resolve.alias[p] = alias[p];
                 }
@@ -44,6 +45,7 @@ module.exports = withTypescript(
                         })
                     );
                 }
+
                 if (ANALYZE) {
                     config.plugins.push(
                         new BundleAnalyzerPlugin({
@@ -53,6 +55,23 @@ module.exports = withTypescript(
                         })
                     );
                 }
+
+                const extractCSSPlugin = new ExtractTextPlugin({
+                    filename: 'static/style.css',
+                    disable: dev
+                });
+                config.module.rules.push({
+                    test: /\.css$/,
+                    use: [
+                        {
+                            loader: 'style-loader'
+                        },
+                        {
+                            loader: 'css-loader'
+                        }
+                    ]
+                });
+
                 return config;
             }
         })
