@@ -1,7 +1,11 @@
 import { Value, Change } from 'slate';
 import * as React from 'react';
-import dynamic from 'next/dynamic';
-// import Editor from 'canner-slate-editor';
+
+let SlateEditor = null;
+if (process.browser) {
+    console.log(require('canner-slate-editor'));
+    SlateEditor = require('canner-slate-editor').default;
+}
 
 interface EditorProps {
     value: Value;
@@ -9,29 +13,19 @@ interface EditorProps {
 }
 
 class RichTextEditor extends React.Component<EditorProps> {
-    private SlateEditor;
-
-    constructor(props: EditorProps) {
-        super(props);
-
-        this.SlateEditor = dynamic(import('canner-slate-editor').then(t => {
-            console.log(t);
-            return t.default;
-        }), {
-            loading: () => <p>loading editor...</p>,
-            ssr: true
-        });
-    }
-
     public render() {
-        return (
-            <this.SlateEditor
-                // renderNode={this.renderNode}
-                value={this.props.value}
-                // onKeyDown={this.onKeyDown}
-                onChange={this.props.onChange}
-            />
-        );
+        if (SlateEditor) {
+            return (
+                <SlateEditor
+                    // renderNode={this.renderNode}
+                    value={this.props.value}
+                    // onKeyDown={this.onKeyDown}
+                    onChange={this.props.onChange}
+                />
+            );
+        } else {
+            return <div>loading editor...</div>;
+        }
     }
 }
 

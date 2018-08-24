@@ -5,7 +5,6 @@ const path = require('path');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const port = parseInt(process.env.PORT, 10) || 3001;
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { ANALYZE } = process.env;
 
@@ -56,10 +55,6 @@ module.exports = withTypescript(
                     );
                 }
 
-                const extractCSSPlugin = new ExtractTextPlugin({
-                    filename: 'static/style.css',
-                    disable: dev
-                });
                 config.module.rules.push({
                     test: /\.css$/,
                     use: [

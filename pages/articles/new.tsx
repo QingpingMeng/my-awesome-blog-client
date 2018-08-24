@@ -4,7 +4,7 @@ import { Value } from 'slate';
 import * as React from 'react';
 
 import * as styles from './styles.scss';
-import RichTextEditor from 'components/Editor/editor';
+import RichTextEditor from '../../components/Editor/editor';
 
 const initialValue = Value.fromJSON({
     document: {
@@ -45,14 +45,12 @@ const initialValue = Value.fromJSON({
     }
 });
 
-interface NewArticleState{
+interface NewArticleState {
     value: Value;
 }
 
 class NewArticle extends React.Component<{}, NewArticleState> {
-    
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -60,9 +58,9 @@ class NewArticle extends React.Component<{}, NewArticleState> {
         };
     }
 
-    private onChange = ({value}) => {
-        this.setState({value});
-    }
+    private onChange = ({ value }) => {
+        this.setState({ value });
+    };
 
     public render() {
         return (
@@ -70,7 +68,10 @@ class NewArticle extends React.Component<{}, NewArticleState> {
                 <div className={styles.editorContainer}>
                     <div className={styles.leftSpace} />
                     <Paper className={styles.editorPaper} elevation={1}>
-                        <RichTextEditor value={this.state.value} onChange={this.onChange} />
+                        <RichTextEditor
+                            value={this.state.value}
+                            onChange={this.onChange}
+                        />
                     </Paper>
                     <div className={styles.rightSpace} />
                 </div>
