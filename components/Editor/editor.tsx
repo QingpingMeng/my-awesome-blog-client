@@ -2,10 +2,9 @@ import { Value, Change } from 'slate';
 import * as React from 'react';
 
 let SlateEditor = null;
-if (process.browser) {
-    console.log(require('canner-slate-editor'));
-    SlateEditor = require('canner-slate-editor').default;
-}
+// if (process.browser) {
+//     SlateEditor = window('canner-slate-editor').default;
+// }
 
 interface EditorProps {
     value: Value;
