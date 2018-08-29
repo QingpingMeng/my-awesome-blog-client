@@ -1,10 +1,8 @@
-import App from '../../components/App/app';
-import { Paper } from '@material-ui/core';
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+import RichTextEditor from './Components/Editor/editor';
 import { Value } from 'slate';
-import * as React from 'react';
-
-import * as styles from './styles.scss';
-import RichTextEditor from '../../components/Editor/editor';
 
 const initialValue = Value.fromJSON({
     document: {
@@ -45,11 +43,7 @@ const initialValue = Value.fromJSON({
     }
 });
 
-interface NewArticleState {
-    value: Value;
-}
-
-class NewArticle extends React.Component<{}, NewArticleState> {
+class App extends Component {
     constructor(props) {
         super(props);
 
@@ -58,26 +52,24 @@ class NewArticle extends React.Component<{}, NewArticleState> {
         };
     }
 
-    private onChange = ({ value }) => {
-        this.setState({ value });
-    };
-
-    public render() {
+    render() {
         return (
-            <App>
-                <div className={styles.editorContainer}>
-                    <div className={styles.leftSpace} />
-                    <Paper className={styles.editorPaper} elevation={1}>
-                        <RichTextEditor
-                            value={this.state.value}
-                            onChange={this.onChange}
-                        />
-                    </Paper>
-                    <div className={styles.rightSpace} />
-                </div>
-            </App>
+            <div className="App">
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <h1 className="App-title">Welcome to React</h1>
+                </header>
+                <p className="App-intro">
+                    To get started, edit <code>src/App.js</code> and save to
+                    reload.
+                </p>
+                <RichTextEditor
+                    value={this.state.value}
+                    onChange={({ value }) => this.setState({ value })}
+                />
+            </div>
         );
     }
 }
 
-export default NewArticle;
+export default App;
