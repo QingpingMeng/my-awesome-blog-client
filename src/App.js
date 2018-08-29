@@ -7,8 +7,6 @@ import AuthCallback from './pages/auth/callback';
 import * as styles from './App.module.css';
 import NewArticle from './pages/articles/new';
 
-console.log(styles);
-
 class App extends React.Component {
     render() {
         return (
