@@ -6,6 +6,7 @@ import AuthCallback from './pages/auth/callback';
 
 import * as styles from './App.module.css';
 import NewArticle from './pages/articles/new';
+import ArticleDetail from './pages/articles/articleDetail';
 
 class App extends React.Component {
     render() {
@@ -21,8 +22,13 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path="/" component={NewArticle} />
                             <Route
+                                exact
                                 path="/articles/new"
                                 component={NewArticle}
+                            />
+                             <Route
+                                path="/articles/:id"
+                                component={ArticleDetail}
                             />
                             <Route
                                 exact

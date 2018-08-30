@@ -20,6 +20,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "slate": "0.33",
+    "slate-html-serializer": "^0.7.2",
     "slate-react": "0.12"
   },
   "devDependencies": {
