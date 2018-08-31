@@ -51,6 +51,8 @@ const rules = [
             if (obj.object === 'block') {
                 console.log('block:', obj.type, obj.data.size);
                 switch (obj.type) {
+                    case 'hr':
+                        return <hr />;
                     case 'code_line':
                         return <span>{children}</span>;
                     case 'code_block':
@@ -66,14 +68,29 @@ const rules = [
                             </pre>
                         );
                     case 'table':
-                        return <table>{children}</table>
+                        return <table>{children}</table>;
                     case 'table_row':
-                        return <tr>{children}</tr>
+                        return <tr>{children}</tr>;
                     case 'table_cell':
-                        return <td>{children}</td>
+                        return <td>{children}</td>;
                     case 'paragraph':
+                        const style = {};
+                        if (obj.data.get('align')) {
+                            style.textAlign = obj.get.get('align');
+                        }
+
+                        // 3rem padding left per 1 indent
+                        if (obj.data.get('indent')) {
+                            style.paddingLeft = `${obj.data.get(
+                                'indent') * 3
+                            }rem`;
+                        }
+
                         return (
-                            <p className={obj.data.get('className')}>
+                            <p
+                                style={style}
+                                className={obj.data.get('className')}
+                            >
                                 {children}
                             </p>
                         );
@@ -156,10 +173,20 @@ const rules = [
                         return <em>{children}</em>;
                     case 'underline':
                         return <u>{children}</u>;
-                    case 'strike':
-                        return <strike>{children}</strike>;
-                    // case 'fontcolor':
-                    //     return <
+                    case 'strikethrough':
+                        return <del>{children}</del>;
+                    case 'fontcolor':
+                        let colorStyle = {};
+                        if(obj.data.get('color')){
+                            colorStyle.color = obj.data.get('color').color;
+                        }
+                        return <span style={colorStyle}>{children}</span>
+                    case 'fontbgcolor':
+                        let bgColorstyle = {};
+                        if(obj.data.get('color')){
+                            bgColorstyle.backgroundColor = obj.data.get('color').color;
+                        }
+                        return <span style={bgColorstyle}>{children}</span>
                     default:
                         return undefined;
                 }
