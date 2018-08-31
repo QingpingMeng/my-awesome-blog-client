@@ -34,4 +34,8 @@
 
 .buttons{
     grid-area: buttons;
+    display: grid;
+    grid-template-columns: 1fr 100px 100px;
+    grid-column-gap: 30px;
+    align-items: flex-end;
 }
