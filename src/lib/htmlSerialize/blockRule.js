@@ -48,6 +48,7 @@ export default  {
                             {children}
                         </p>
                     );
+                case 'title':
                 case 'header_one':
                     return <h1>{children}</h1>;
                 case 'header_two':

@@ -1,4 +1,4 @@
-.editorContainer{
+/* .d{
     display: grid;
     grid-template-areas: 
     "left paper right"
@@ -7,7 +7,7 @@
     align-items: center;
     grid-template-rows: minmax(400px, 1fr) 150px;
     padding-top: 1rem;
-}
+} */
 
 .paper{
     grid-area: paper;

@@ -9,6 +9,10 @@
 
 .mainview{
   grid-area: mainview;
+  grid-template-columns: 1fr minmax(600px, 74rem) 1fr;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: grid;
 }
 
 .header{

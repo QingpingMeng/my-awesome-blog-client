@@ -19,6 +19,7 @@ class App extends React.Component {
                     </div>
 
                     <div className={styles.mainview}>
+                        <div />
                         <Switch>
                             <Route exact path="/" component={NewArticle} />
                             <Route
@@ -26,8 +27,8 @@ class App extends React.Component {
                                 path="/articles/new"
                                 component={NewArticle}
                             />
-                             <Route
-                                path="/articles/:id"
+                            <Route
+                                path="/articles/:slug"
                                 component={ArticleDetail}
                             />
                             <Route
@@ -36,6 +37,7 @@ class App extends React.Component {
                                 component={AuthCallback}
                             />
                         </Switch>
+                        <div />
                     </div>
                 </div>
             </div>

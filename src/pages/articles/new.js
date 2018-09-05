@@ -101,7 +101,7 @@ class NewArticle extends React.Component {
 
     render() {
         return (
-            <div className={styles.editorContainer}>
+            <div>
                 <div className={styles.leftSpace} />
                 <Paper className={styles.paper} elevation={1}>
                     <div className={styles.editor}>
