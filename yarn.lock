@@ -2967,9 +2967,9 @@ caniuse-lite@^1.0.30000830, caniuse-lite@^1.0.30000839, caniuse-lite@^1.0.300008
   version "1.0.30000880"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000880.tgz#b7b6ceaf739e17d0dda0d89426cba4be16d07bb0"
 
-canner-slate-editor@^0.6.7-rc.4:
-  version "0.6.7-rc.4"
-  resolved "https://registry.yarnpkg.com/canner-slate-editor/-/canner-slate-editor-0.6.7-rc.4.tgz#c3713070ffe5ebea03639b1f4a4f2037ce70b4eb"
+"canner-slate-editor@git+https://github.com/QingpingMeng/canner-slate-editor.git":
+  version "0.6.7-rc.2"
+  resolved "git+https://github.com/QingpingMeng/canner-slate-editor.git#da53550cba0894193886fb49f62ccd0c8597d86b"
   dependencies:
     "@canner/slate-constant" "^1.0.9"
     "@canner/slate-helper-block-list" "^0.1.12"

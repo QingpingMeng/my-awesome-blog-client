@@ -29,7 +29,7 @@ function create(initialState) {
         cache
     });
     const httpLink = new HttpLink({
-        uri: 'https://awesome-blog-server-bxjuimqehq.now.sh/graphql', // Server URL (must be absolute)
+        uri: 'https://awesome-blog-server-aqteduhniy.now.sh/graphql', // Server URL (must be absolute)
         fetch
     });
 

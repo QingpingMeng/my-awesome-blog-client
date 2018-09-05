@@ -3,11 +3,13 @@ import * as React from 'react';
 
 import 'antd/dist/antd.min.css';
 
-class RichTextEditor extends React.Component{
+class RichTextEditor extends React.Component {
     render() {
         return (
             <SlateEditor
                 value={this.props.value}
+                renderNode={this.props.renderNode}
+                renderPlaceholder={this.props.renderPlaceholder}
                 onChange={this.props.onChange}
             />
         );
