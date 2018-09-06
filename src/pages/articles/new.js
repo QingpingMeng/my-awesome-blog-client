@@ -5,7 +5,7 @@ import { slateHTMLSerialize } from '../../lib/htmlSerialize';
 import { Mutation } from 'react-apollo';
 import {withRouter} from 'react-router';
 
-import * as styles from './styles.module.css';
+import * as styles from './new.module.css';
 import RichTextEditor from '../../components/Editor/editor';
 import StatefulButton from '../../components/Button/statefulButton';
 import { ArticleInput } from '../../models/articles.model';
@@ -68,7 +68,7 @@ class NewArticle extends React.Component {
     };
 
     onSubmiteSuccess = ({createArticle}) => {
-        this.props.history.push(`/articles/${createArticle.slug}`);
+        this.props.history.replace(`/articles/${createArticle.slug}`);
     };
 
     renderNode = props => {

@@ -7,9 +7,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import UserInfo from './userInfo';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
+    goHome = () => {
+        this.props.history.push('/');
+    };
+
     render() {
         return (
             <AppBar position="static">
@@ -26,9 +29,14 @@ class Header extends React.Component {
                     >
                         My Awesome Blog
                     </Typography>
-                    <Link to="/articles/new" >
-                        <Button>New Post </Button>
-                    </Link>
+
+                    <Button
+                        onClick={() => {
+                            this.props.history.push('/articles/new');
+                        }}
+                    >
+                        New Post{' '}
+                    </Button>
 
                     <UserInfo />
                 </Toolbar>
