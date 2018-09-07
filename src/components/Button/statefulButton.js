@@ -5,10 +5,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const StatefullButton = props => {
     const { loading, onClick, ...rest } = props;
     return (
-        <Button {...rest} disabled={loading} onClick={onClick}>
+        <Button {...rest} disabled={loading || props.disabled} onClick={onClick}>
             {!loading && props.children}
             {loading && (
-                <CircularProgress size={props.loadingSize || 50} />
+                <CircularProgress size={props.loadingSize || 20} />
             )}
         </Button>
     );

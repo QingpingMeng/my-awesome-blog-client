@@ -15,7 +15,7 @@ export default class ArticlePreview extends Component {
     render() {
         return (
             <Card>
-                <CardActionArea style={{ width: '100%' }}>
+                <CardActionArea onClick={this.props.onReadMore} style={{ width: '100%' }}>
                     <CardContent>
                         <Typography align='right' color="textSecondary">
                         {moment.utc(this.props.createdAt).fromNow()}
@@ -29,10 +29,9 @@ export default class ArticlePreview extends Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Button size="small" color="primary">
-                        Read Full Article
+                    <Button onClick={this.props.onReadMore} size="small" color="primary">
+                        Read More
                     </Button>
-                    ddd
                 </CardActions>
             </Card>
         );
