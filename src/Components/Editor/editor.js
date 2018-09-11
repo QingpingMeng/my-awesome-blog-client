@@ -9,7 +9,6 @@ class RichTextEditor extends React.Component {
             <SlateEditor
                 value={this.props.value}
                 renderNode={this.props.renderNode}
-                renderPlaceholder={this.props.renderPlaceholder}
                 onChange={this.props.onChange}
             />
         );

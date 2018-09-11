@@ -6,6 +6,7 @@ import { Paper } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withRouter } from 'react-router';
 import Prism from 'prismjs';
+import './articleDetail.css';
 
 const ARTICLE_QUERY = gql`
     query GetArticle($condition: String!) {

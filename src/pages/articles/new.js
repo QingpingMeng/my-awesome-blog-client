@@ -3,7 +3,7 @@ import { Value } from 'slate';
 import React from 'react';
 import { slateHTMLSerialize } from '../../lib/htmlSerialize';
 import { Mutation } from 'react-apollo';
-import {withRouter} from 'react-router';
+import { withRouter } from 'react-router';
 
 import * as styles from './new.module.css';
 import RichTextEditor from '../../components/Editor/editor';
@@ -26,8 +26,6 @@ const initialValue = Value.fromJSON({
             {
                 object: 'block',
                 type: 'title',
-                min: 1,
-                max: 1,
                 nodes: [
                     {
                         object: 'text',
@@ -57,46 +55,62 @@ class NewArticle extends React.Component {
     };
 
     onSubmit = createArticle => {
+        const titleNode = this.state.value.document.getBlocks().get(0);
+        const summaryNode = this.state.value.document.getBlocks().get(1);
+        const newValue = this.state.value
+            .change()
+            .setNodeByKey(titleNode.key, { type: 'title' })
+            .setNodeByKey(summaryNode.key, { type: 'summary' })
+            .value;
+
         const articleInput = new ArticleInput();
-        articleInput.body = slateHTMLSerialize(this.state.value);
-        articleInput.jsonBody = JSON.stringify(this.state.value.toJSON());
-        articleInput.title = this.state.value.document
-            .getBlocks()
-            .find(block => block.text !== '')
-            .text;
+        articleInput.body = slateHTMLSerialize(newValue);
+        articleInput.jsonBody = JSON.stringify(newValue.toJSON());
+        articleInput.title = titleNode ? titleNode.text : 'Untitled';
+        articleInput.summary = summaryNode
+            ? summaryNode.text
+            : "This article doesn't have any summary.";
         createArticle({ variables: { article: articleInput } });
     };
 
-    onSubmiteSuccess = ({createArticle}) => {
+    onSubmiteSuccess = ({ createArticle }) => {
         this.props.history.replace(`/articles/${createArticle.slug}`);
     };
 
     renderNode = props => {
-        if (props.node.type === 'title') {
-            return <h1 {...props.attributes}>{props.children}</h1>;
+        if (this.isTitleBlock(props.node)) {
+            return (
+                <h1 className="title" {...props.attributes}>
+                    {props.children}
+                </h1>
+            );
+        }
+
+        if (this.isSummaryBlock(props.node)) {
+            // props.node.type = 'summary'; change.setBlocks('code')
+            return (
+                <p
+                    className="summary"
+                    style={{
+                        opacity: '0.8',
+                        fontSize: '1.1rem'
+                    }}
+                    {...props.attributes}
+                >
+                    {props.children}
+                </p>
+            );
         }
     };
 
-    renderPlaceholder = props => {
-        const { node } = props;
-        if (node.object !== 'block') return;
-        if (node.text !== '') return;
-        if (node.type === 'title') {
-            return (
-                <em
-                    contentEditable={false}
-                    style={{
-                        display: 'inline-block',
-                        width: '0',
-                        fontSize: '3rem',
-                        whiteSpace: 'nowrap',
-                        opacity: '0.33'
-                    }}
-                >
-                    Title
-                </em>
-            );
-        }
+    isTitleBlock = node => {
+        if (node.object !== 'block') return false;
+        if (node === this.state.value.document.getBlocks().get(0)) return true;
+    };
+
+    isSummaryBlock = node => {
+        if (node.object !== 'block') return false;
+        if (node === this.state.value.document.getBlocks().get(1)) return true;
     };
 
     render() {
@@ -107,7 +121,6 @@ class NewArticle extends React.Component {
                     <div className={styles.editor}>
                         <RichTextEditor
                             value={this.state.value}
-                            renderPlaceholder={this.renderPlaceholder}
                             renderNode={this.renderNode}
                             onChange={this.onChange}
                         />

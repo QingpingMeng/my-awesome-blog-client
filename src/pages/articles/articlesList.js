@@ -14,7 +14,7 @@ const LIST_ARTICLES = gql`
         queryArticles(limit: $limit, offset: $offset) {
             slug
             title
-            previewBody
+            summary
             createdAt
         }
     }

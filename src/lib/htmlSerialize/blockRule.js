@@ -27,6 +27,12 @@ export default  {
                     return <tr>{children}</tr>;
                 case 'table_cell':
                     return <td>{children}</td>;
+                case 'summary':
+                    return  <p
+                    className="summary"
+                >
+                    {children}
+                </p>
                 case 'paragraph':
                     const style = {};
                     if (obj.data.get('align')) {
@@ -49,6 +55,7 @@ export default  {
                         </p>
                     );
                 case 'title':
+                    return <h1 className="title">{children}</h1>
                 case 'header_one':
                     return <h1>{children}</h1>;
                 case 'header_two':
