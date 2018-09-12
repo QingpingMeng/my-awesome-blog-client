@@ -30,7 +30,7 @@ class Header extends React.Component {
                     />
                     <Button
                         onClick={() => {
-                            this.props.history.push('/articles/new');
+                            this.props.history.push('/articles/editor');
                         }}
                     >
                         New Post{' '}

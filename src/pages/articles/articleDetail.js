@@ -11,7 +11,7 @@ import Prism from 'prismjs';
 import './articleDetail.css';
 import DeleteArticleButton from '../../components/Articles/deleteArticleButton';
 
-const ARTICLE_QUERY = gql`
+export const ARTICLE_DETAIL_QUERY = gql`
     query GetArticle($condition: String!) {
         queryArticle(condition: $condition) {
             body
@@ -27,12 +27,13 @@ class ArticleDetail extends Component {
     };
 
     render() {
+        const slug = this.props.match.params.slug;
         return (
             <Query
-                query={ARTICLE_QUERY}
+                query={ARTICLE_DETAIL_QUERY}
                 variables={{
                     condition: JSON.stringify({
-                        slug: this.props.match.params.slug
+                        slug: slug
                     })
                 }}
             >
@@ -96,14 +97,15 @@ class ArticleDetail extends Component {
                                         marginRight:'1rem'
                                     }}
                                     mini
-                                    // onClick={() => this.showConfirmDialog()}
+                                    onClick={() => this.props.history.push(`/articles/editor/${slug}`)}
                                     variant="fab"
                                     aria-label="Edit"
+                                    color="primary"
                                 >
                                     <EditIcon />
                                 </Button>
                                 <DeleteArticleButton
-                                    slug={this.props.match.params.slug}
+                                    slug={slug}
                                     onDeleted={this.onDeletedSuccess}
                                 />
                             </div>

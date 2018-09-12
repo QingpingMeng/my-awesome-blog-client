@@ -2,21 +2,39 @@ import { Paper, Button } from '@material-ui/core';
 import { Value } from 'slate';
 import React from 'react';
 import { slateHTMLSerialize } from '../../lib/htmlSerialize';
-import { Mutation } from 'react-apollo';
+import { Mutation, withApollo } from 'react-apollo';
 import { withRouter } from 'react-router';
 
-import * as styles from './new.module.css';
+import * as styles from './articleEditor.module.css';
 import RichTextEditor from '../../components/Editor/editor';
 import StatefulButton from '../../components/Button/statefulButton';
 import { ArticleInput } from '../../models/articles.model';
 import gql from 'graphql-tag';
 import REFRESH_ARTICLE_LIST from '../../lib/queries/refreshList';
+import { ARTICLE_DETAIL_QUERY } from './articleDetail';
 
 const CREAT_ARTICLE = gql`
     mutation Create_Article($article: ArticleInput!) {
         createArticle(article: $article) {
             id
             slug
+        }
+    }
+`;
+
+const UPDATE_ARTICLE = gql`
+    mutation Update_Article($article: ArticleInput!) {
+        updateArticle(article: $article) {
+            id
+            slug
+        }
+    }
+`;
+
+const QUERY_ARTICLE_FOR_EDIT = gql`
+    query GetArticle($condition: String!) {
+        queryArticle(condition: $condition) {
+            jsonBody
         }
     }
 `;
@@ -42,20 +60,39 @@ const initialValue = Value.fromJSON({
     }
 });
 
-class NewArticle extends React.Component {
+class ArticleEditor extends React.Component {
+    slug = undefined;
+
     constructor(props) {
         super(props);
 
         this.state = {
             value: initialValue
         };
+
+        this.slug = this.props.match.params.slug;
+    }
+
+    async componentDidMount() {
+        const { data } = await this.props.client.query({
+            query: QUERY_ARTICLE_FOR_EDIT,
+            variables: {
+                condition: JSON.stringify({
+                    slug: this.slug
+                })
+            }
+        });
+
+        this.setState({
+            value: Value.fromJSON(JSON.parse(data.queryArticle.jsonBody))
+        });
     }
 
     onChange = ({ value }) => {
         this.setState({ value });
     };
 
-    onSubmit = createArticle => {
+    onSubmit = createOrUpdateArticle => {
         const titleNode = this.state.value.document.getBlocks().get(0);
         const summaryNode = this.state.value.document.getBlocks().get(1);
         const newValue = this.state.value
@@ -70,11 +107,44 @@ class NewArticle extends React.Component {
         articleInput.summary = summaryNode
             ? summaryNode.text
             : "This article doesn't have any summary.";
-        createArticle({ variables: { article: articleInput } });
+        if (this.slug) {
+            articleInput.slug = this.slug;
+        }
+        createOrUpdateArticle({ variables: { article: articleInput } });
     };
 
-    onSubmiteSuccess = ({ createArticle }) => {
-        this.props.history.replace(`/articles/${createArticle.slug}`);
+    onSubmitedSuccess = ({ createArticle }) => {
+        const slug = this.slug ? this.slug : createArticle.slug;
+        this.props.history.replace(`/articles/${slug}`);
+    };
+
+    refreshQueries = () => {
+        let queriesToRefetch = [REFRESH_ARTICLE_LIST];
+
+        if (this.slug) {
+            // need to refresh in update scenario
+            queriesToRefetch = [
+                ...queriesToRefetch,
+                {
+                    query: ARTICLE_DETAIL_QUERY,
+                    variables: {
+                        condition: JSON.stringify({
+                            slug: this.slug
+                        })
+                    }
+                },
+                {
+                    query: QUERY_ARTICLE_FOR_EDIT,
+                    variables: {
+                        condition: JSON.stringify({
+                            slug: this.slug
+                        })
+                    }
+                }
+            ];
+        }
+
+        return queriesToRefetch;
     };
 
     renderNode = props => {
@@ -127,11 +197,12 @@ class NewArticle extends React.Component {
                     </div>
 
                     <Mutation
-                        mutation={CREAT_ARTICLE}
-                        onCompleted={this.onSubmiteSuccess}
-                        refetchQueries={() => [REFRESH_ARTICLE_LIST]}
+                        mutation={this.slug ? UPDATE_ARTICLE : CREAT_ARTICLE}
+                        onCompleted={this.onSubmitedSuccess}
+                        awaitRefetchQueries={true}
+                        refetchQueries={this.refreshQueries}
                     >
-                        {(createArticle, { data, loading }) => (
+                        {(createOrUpdateArticle, { data, loading }) => (
                             <div className={styles.buttons}>
                                 <div />
 
@@ -139,10 +210,12 @@ class NewArticle extends React.Component {
                                     variant="contained"
                                     loading={loading}
                                     loadingSize={20}
-                                    onClick={e => this.onSubmit(createArticle)}
+                                    onClick={e =>
+                                        this.onSubmit(createOrUpdateArticle)
+                                    }
                                     color="primary"
                                 >
-                                    Submit
+                                    Publish
                                 </StatefulButton>
                                 <Button
                                     variant="contained"
@@ -161,4 +234,4 @@ class NewArticle extends React.Component {
     }
 }
 
-export default withRouter(NewArticle);
+export default withApollo(withRouter(ArticleEditor));

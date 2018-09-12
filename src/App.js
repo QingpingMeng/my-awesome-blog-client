@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router';
 import AuthCallback from './pages/auth/callback';
 
 import * as styles from './App.module.css';
-import NewArticle from './pages/articles/new';
+import ArticleEditor from './pages/articles/articleEditor';
 import ArticleDetail from './pages/articles/articleDetail';
 import ArticlesList from './pages/articles/articlesList';
 
@@ -25,8 +25,12 @@ class App extends React.Component {
                             <Route exact path="/" component={ArticlesList} />
                             <Route
                                 exact
-                                path="/articles/new"
-                                component={NewArticle}
+                                path="/articles/editor/"
+                                component={ArticleEditor}
+                            />
+                            <Route
+                                path="/articles/editor/:slug"
+                                component={ArticleEditor}
                             />
                             <Route
                                 path="/articles/:slug"

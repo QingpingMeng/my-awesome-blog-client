@@ -88,6 +88,7 @@ class DeleteArticle extends Component {
                     <Fragment>
                         <Button
                             mini
+                            color="secondary"
                             onClick={() => this.showConfirmDialog()}
                             variant="fab"
                             aria-label="Delete"
