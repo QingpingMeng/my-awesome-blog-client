@@ -6,7 +6,6 @@ import {
     Typography
 } from '@material-ui/core';
 import moment from 'moment';
-// import CardActionArea from '@material-ui/core/CardActionArea';
 import 'github-markdown-css';
 
 export default class ArticlePreview extends Component {
@@ -31,7 +30,7 @@ export default class ArticlePreview extends Component {
                                 `This article doesn't have any summary.`}
                         </Typography>
                         <Typography align="right" color="textSecondary">
-                            {moment.utc(this.props.createdAt).fromNow()}
+                            {moment(this.props.createdAt).fromNow()}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

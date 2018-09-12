@@ -7,9 +7,9 @@ import * as styles from './articlesList.module.css';
 import { withRouter } from 'react-router';
 import StatefullButton from '../../components/Button/statefulButton';
 
-const PAGE_LIMIT = 10;
+export const PAGE_LIMIT = 10;
 
-const LIST_ARTICLES = gql`
+export const LIST_ARTICLES = gql`
     query ListArticles($limit: Int, $offset: Int) {
         queryArticles(limit: $limit, offset: $offset) {
             slug

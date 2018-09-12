@@ -10,6 +10,7 @@ import RichTextEditor from '../../components/Editor/editor';
 import StatefulButton from '../../components/Button/statefulButton';
 import { ArticleInput } from '../../models/articles.model';
 import gql from 'graphql-tag';
+import REFRESH_ARTICLE_LIST from '../../lib/queries/refreshList';
 
 const CREAT_ARTICLE = gql`
     mutation Create_Article($article: ArticleInput!) {
@@ -60,8 +61,7 @@ class NewArticle extends React.Component {
         const newValue = this.state.value
             .change()
             .setNodeByKey(titleNode.key, { type: 'title' })
-            .setNodeByKey(summaryNode.key, { type: 'summary' })
-            .value;
+            .setNodeByKey(summaryNode.key, { type: 'summary' }).value;
 
         const articleInput = new ArticleInput();
         articleInput.body = slateHTMLSerialize(newValue);
@@ -129,6 +129,7 @@ class NewArticle extends React.Component {
                     <Mutation
                         mutation={CREAT_ARTICLE}
                         onCompleted={this.onSubmiteSuccess}
+                        refetchQueries={() => [REFRESH_ARTICLE_LIST]}
                     >
                         {(createArticle, { data, loading }) => (
                             <div className={styles.buttons}>

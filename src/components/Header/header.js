@@ -14,18 +14,20 @@ class Header extends React.Component {
 
     render() {
         return (
-            <AppBar position="fixed">
+            <AppBar position="fixed" color="light">
                 <Toolbar>
-                    <Typography
-                        variant="title"
-                        color="inherit"
+                    <Button type="flat" onClick={() => {
+                        this.props.history.push('/');
+                    }}>
+                        <Typography variant="title" color="inherit">
+                            My Awesome Blog
+                        </Typography>
+                    </Button>
+                    <div
                         style={{
                             flexGrow: 1
                         }}
-                    >
-                        My Awesome Blog
-                    </Typography>
-
+                    />
                     <Button
                         onClick={() => {
                             this.props.history.push('/articles/new');
@@ -33,7 +35,7 @@ class Header extends React.Component {
                     >
                         New Post{' '}
                     </Button>
-
+                    <Button>{`<About />`}</Button>
                     <UserInfo />
                 </Toolbar>
             </AppBar>
