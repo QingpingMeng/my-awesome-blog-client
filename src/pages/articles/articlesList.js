@@ -68,7 +68,6 @@ class ArticlesList extends Component {
                                             prev,
                                             { fetchMoreResult }
                                         ) => {
-                                            console.log(fetchMoreResult);
                                             if (
                                                 !fetchMoreResult ||
                                                 !fetchMoreResult.queryArticles ||

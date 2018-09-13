@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { withRouter } from 'react-router';
-import queryString from 'query-string'
+import queryString from 'query-string';
+import { withApollo } from 'react-apollo';
 
 class AuthCallback extends React.Component {
     componentDidMount() {
@@ -13,7 +14,7 @@ class AuthCallback extends React.Component {
     getAccessToken = async () => {
         const qs = queryString.parse(this.props.location.search);
         return await fetch(
-            'https://awesome-blog-server-bxjuimqehq.now.sh/signin',
+            'http://localhost:3000/signin',
             {
                 method: 'post',
                 headers: {
@@ -24,7 +25,21 @@ class AuthCallback extends React.Component {
             }
         )
             .then(res => res.json())
-            .then(data => data.token);
+            .then(data => {
+                this.props.client.writeData({
+                    data: {
+                        authStore: {
+                            __typename: 'AuthStore',
+                            currentUser: {
+                                ...data,
+                                isLoggedIn: true,
+                                __typename: 'CurrentUser'
+                            }
+                        }
+                    }
+                });
+                return data.token;
+            });
     };
 
     render() {
@@ -32,4 +47,4 @@ class AuthCallback extends React.Component {
     }
 }
 
-export default withRouter(AuthCallback);
+export default withApollo(withRouter(AuthCallback));

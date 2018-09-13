@@ -8,6 +8,7 @@ import * as styles from './App.module.css';
 import ArticleEditor from './pages/articles/articleEditor';
 import ArticleDetail from './pages/articles/articleDetail';
 import ArticlesList from './pages/articles/articlesList';
+import Login from './pages/auth/login';
 
 class App extends React.Component {
     render() {
@@ -23,6 +24,7 @@ class App extends React.Component {
                         <div />
                         <Switch>
                             <Route exact path="/" component={ArticlesList} />
+                            <Route path="/login" component={Login} />
                             <Route
                                 exact
                                 path="/articles/editor/"

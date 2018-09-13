@@ -3,7 +3,6 @@ import React from 'react';
 export default  {
     serialize(obj, children) {
         if (obj.object === 'mark') {
-            console.log('mark:', obj.type);
             switch (obj.type.toLowerCase()) {
                 case 'bold':
                     return <strong>{children}</strong>;

@@ -3,9 +3,12 @@ export const authStore = {
         authStore: {
             __typename: 'AuthStore',
             currentUser: {
+                isLoggedIn: false,
+                email: '',
+                username: '',
+                avatar: '',
                 __typename: 'CurrentUser'
             },
-            isLoggedIn: false
         }
     },
 
@@ -18,8 +21,13 @@ export const authStore = {
                 const data = {
                     authStore: {
                         __typename: 'AuthStore',
-                        currentUser: undefined,
-                        isLoggedIn: false
+                        currentUser: {
+                            isLoggedIn: false,
+                            email: '',
+                            username: '',
+                            avatar: '',
+                            __typename: 'CurrentUser'
+                        },
                     }
                 };
                 cache.writeData({ data });
@@ -32,9 +40,9 @@ export const authStore = {
                         __typename: 'AuthStore',
                         currentUser: {
                             ...userInput,
+                            isLoggedIn: true,
                             __typename: 'CurrentUser'
                         },
-                        isLoggedIn: true
                     }
                 };
                 cache.writeData({ data });

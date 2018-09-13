@@ -1,14 +1,18 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import Avatar from '@material-ui/core/Avatar';
-import GithubSignin from '../SigninLink/githubSignin';
+// import Avatar from '@material-ui/core/Avatar';
+// import GithubSignin from '../SigninLink/githubSignin';
 import { Query } from 'react-apollo';
+import { Button } from '@material-ui/core';
+import blog_config from '../../config/blog.config';
 
-const query = gql`
+export const CURRENT_USER_EMAIL = gql`
     query {
-        currentUser {
-            username
-            avatar
+        authStore @client {
+            currentUser {
+                isLoggedIn
+                email
+            }
         }
     }
 `;
@@ -16,22 +20,31 @@ const query = gql`
 class UserInfo extends React.Component {
     render() {
         return (
-            <Query query={query} fetchPolicy={'cache-and-network'}>
-                {({ loading, error, data }) => {
+            <Query query={CURRENT_USER_EMAIL} fetchPolicy={'cache-and-network'}>
+                {({ error, data }) => {
                     if (error) {
-                        return <GithubSignin size="24px" />;
+                        return null;
                     }
 
-                    if (data.currentUser) {
-                        return (
-                            <Avatar
-                                alt={data.currentUser.username}
-                                src={data.currentUser.avatar}
-                            />
-                        );
+                    const { currentUser } = data.authStore;
+
+                    if (!currentUser.isLoggedIn) {
+                        return null;
                     }
 
-                    return null;
+                    if (currentUser.email !== blog_config.ownerEmail) {
+                        return null;
+                    }
+
+                    return (
+                        <Button
+                            onClick={() => {
+                                this.props.history.push('/articles/editor');
+                            }}
+                        >
+                            New Post{' '}
+                        </Button>
+                    );
                 }}
             </Query>
         );

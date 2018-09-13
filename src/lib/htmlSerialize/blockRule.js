@@ -3,7 +3,6 @@ import React from 'react';
 export default  {
     serialize(obj, children) {
         if (obj.object === 'block') {
-            console.log('block:', obj.type, obj.data.size);
             switch (obj.type) {
                 case 'hr':
                     return <hr />;

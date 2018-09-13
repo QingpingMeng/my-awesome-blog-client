@@ -17,6 +17,20 @@ export const ARTICLE_DETAIL_QUERY = gql`
             body
             title
             createdAt
+            author {
+                email
+            }
+        }
+    }
+`;
+
+const CURRENT_USER_ID = gql`
+    query CurrentUserId {
+        authStore @client {
+            currentUser {
+                isLoggedIn
+                email
+            }
         }
     }
 `;
@@ -46,6 +60,7 @@ class ArticleDetail extends Component {
                         );
                     }
 
+                    const { email:authorEmail } = data.queryArticle.author;
                     if (!data.queryArticle) {
                         return (
                             <div
@@ -86,29 +101,61 @@ class ArticleDetail extends Component {
                                     __html: data.queryArticle.body
                                 }}
                             />
-                            <div
-                                style={{
-                                    textAlign: 'right',
-                                    padding: '0 1rem 1rem 0'
+                            <Query query={CURRENT_USER_ID}>
+                                {({
+                                    loading: loadingUser,
+                                    data: userData,
+                                    error: loadingUserError
+                                }) => {
+                                    if (loadingUser || loadingUserError || !userData.authStore) {
+                                        return null;
+                                    }
+
+                                    const {
+                                        isLoggedIn,
+                                        email: currentUserEmail
+                                    } = userData.authStore.currentUser;
+
+                                    if (
+                                        isLoggedIn &&
+                                        currentUserEmail === authorEmail
+                                    ) {
+                                        return (
+                                            <div
+                                                style={{
+                                                    textAlign: 'right',
+                                                    padding: '0 1rem 1rem 0'
+                                                }}
+                                            >
+                                                <Button
+                                                    style={{
+                                                        marginRight: '1rem'
+                                                    }}
+                                                    mini
+                                                    onClick={() =>
+                                                        this.props.history.push(
+                                                            `/articles/editor/${slug}`
+                                                        )
+                                                    }
+                                                    variant="fab"
+                                                    aria-label="Edit"
+                                                    color="primary"
+                                                >
+                                                    <EditIcon />
+                                                </Button>
+                                                <DeleteArticleButton
+                                                    slug={slug}
+                                                    onDeleted={
+                                                        this.onDeletedSuccess
+                                                    }
+                                                />
+                                            </div>
+                                        );
+                                    }
+
+                                    return null;
                                 }}
-                            >
-                                <Button
-                                    style={{
-                                        marginRight:'1rem'
-                                    }}
-                                    mini
-                                    onClick={() => this.props.history.push(`/articles/editor/${slug}`)}
-                                    variant="fab"
-                                    aria-label="Edit"
-                                    color="primary"
-                                >
-                                    <EditIcon />
-                                </Button>
-                                <DeleteArticleButton
-                                    slug={slug}
-                                    onDeleted={this.onDeletedSuccess}
-                                />
-                            </div>
+                            </Query>
                         </Paper>
                     );
                 }}

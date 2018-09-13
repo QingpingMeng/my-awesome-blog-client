@@ -28,13 +28,6 @@ class Header extends React.Component {
                             flexGrow: 1
                         }}
                     />
-                    <Button
-                        onClick={() => {
-                            this.props.history.push('/articles/editor');
-                        }}
-                    >
-                        New Post{' '}
-                    </Button>
                     <Button>{`<About />`}</Button>
                     <UserInfo />
                 </Toolbar>
