@@ -74,18 +74,20 @@ class ArticleEditor extends React.Component {
     }
 
     async componentDidMount() {
-        const { data } = await this.props.client.query({
-            query: QUERY_ARTICLE_FOR_EDIT,
-            variables: {
-                condition: JSON.stringify({
-                    slug: this.slug
-                })
-            }
-        });
+        if (this.slug) {
+            const { data } = await this.props.client.query({
+                query: QUERY_ARTICLE_FOR_EDIT,
+                variables: {
+                    condition: JSON.stringify({
+                        slug: this.slug
+                    })
+                }
+            });
 
-        this.setState({
-            value: Value.fromJSON(JSON.parse(data.queryArticle.jsonBody))
-        });
+            this.setState({
+                value: Value.fromJSON(JSON.parse(data.queryArticle.jsonBody))
+            });
+        }
     }
 
     onChange = ({ value }) => {

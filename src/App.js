@@ -9,8 +9,37 @@ import ArticleEditor from './pages/articles/articleEditor';
 import ArticleDetail from './pages/articles/articleDetail';
 import ArticlesList from './pages/articles/articlesList';
 import Login from './pages/auth/login';
+import { withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
+
+const CURRENT_USER = gql`
+    {
+        currentUser {
+            id
+            email
+        }
+    }
+`;
+
+const SET_LOCAL_USER = gql`
+    mutation SetLocalUser($user: CurrentUser) {
+        setCurrentUser(user: $user) @client
+    }
+`;
 
 class App extends React.Component {
+    componentDidMount() {
+        this.props.client.query({ query: CURRENT_USER }).then(({ data }) => {
+            console.log(data);
+            return this.props.client.mutate({
+                mutation: SET_LOCAL_USER,
+                variables: {
+                    user: { ...data.currentUser, isLoggedIn: true }
+                }
+            });
+        });
+    }
+
     render() {
         return (
             <div>
@@ -52,4 +81,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withApollo(App);
