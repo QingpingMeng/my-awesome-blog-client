@@ -28,7 +28,7 @@ class Header extends React.Component {
                             flexGrow: 1
                         }}
                     />
-                    <Button>{`<About />`}</Button>
+                    <Button onClick={() => this.props.history.push('/about')}>{`<About />`}</Button>
                     <UserInfo />
                 </Toolbar>
             </AppBar>

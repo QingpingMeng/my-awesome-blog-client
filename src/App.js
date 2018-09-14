@@ -10,6 +10,7 @@ import ArticleDetail from './pages/articles/articleDetail';
 import ArticlesList from './pages/articles/articlesList';
 import Login from './pages/auth/login';
 import { withApollo } from 'react-apollo';
+import About from './pages/about'
 import gql from 'graphql-tag';
 
 const CURRENT_USER = gql`
@@ -30,7 +31,6 @@ const SET_LOCAL_USER = gql`
 class App extends React.Component {
     componentDidMount() {
         this.props.client.query({ query: CURRENT_USER }).then(({ data }) => {
-            console.log(data);
             return this.props.client.mutate({
                 mutation: SET_LOCAL_USER,
                 variables: {
@@ -71,6 +71,11 @@ class App extends React.Component {
                                 exact
                                 path="/auth/callback"
                                 component={AuthCallback}
+                            />
+                             <Route
+                                exact
+                                path="/about"
+                                component={About}
                             />
                         </Switch>
                         <div />
