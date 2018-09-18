@@ -10,13 +10,12 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
 RUN npm install -g -s --no-progress yarn && \
-    yarn && \
-    yarn run build && \
-    yarn cache clean
+    yarn 
 
 COPY . /src/app
 
-RUN yarn run build
+RUN yarn run build && \
+    yarn cache clean
 
 FROM nginx:alpine
 
