@@ -6,7 +6,8 @@ WORKDIR /src/app
 
 COPY package.json /src/app/package.json
 
-RUN apt-get install git
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
 RUN npm install
 
