@@ -5,6 +5,7 @@ RUN mkdir -p /src/app
 WORKDIR /src/app
 
 COPY package.json /src/app/package.json
+COPY yarn.lock /src/app/yarn.lock
 
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
