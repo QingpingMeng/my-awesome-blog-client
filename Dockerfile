@@ -6,6 +6,8 @@ WORKDIR /src/app
 
 COPY package.json /src/app/package.json
 
+RUN npm install --no-cache git
+
 RUN npm install
 
 COPY . /src/app
