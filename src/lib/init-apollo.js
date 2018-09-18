@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 import { withClientState } from 'apollo-link-state';
 import { authStore } from '../stores/authStore';
 import { merge } from 'lodash';
+import {graphQLEndpoint} from '../config/app.config';
 
 let apolloClient = null;
 
@@ -29,11 +30,10 @@ function create(initialState) {
         cache
     });
     const httpLink = new HttpLink({
-        uri: 'http://localhost:3000/graphql', // Server URL (must be absolute)
+        uri: graphQLEndpoint, // Server URL (must be absolute)
         fetch
     });
 
-    // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
     return new ApolloClient({
         link: ApolloLink.from([authMiddleware, localLink, httpLink]),
         cache: cache

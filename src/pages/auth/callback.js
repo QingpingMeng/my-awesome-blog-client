@@ -2,6 +2,7 @@ import * as React from 'react';
 import { withRouter } from 'react-router';
 import queryString from 'query-string';
 import { withApollo } from 'react-apollo';
+import { authSignInEdnpoint } from '../../config/app.config';
 
 class AuthCallback extends React.Component {
     componentDidMount() {
@@ -13,17 +14,14 @@ class AuthCallback extends React.Component {
 
     getAccessToken = async () => {
         const qs = queryString.parse(this.props.location.search);
-        return await fetch(
-            'http://localhost:3000/signin',
-            {
-                method: 'post',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ code: qs.code })
-            }
-        )
+        return await fetch(authSignInEdnpoint, {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: qs.code })
+        })
             .then(res => res.json())
             .then(data => {
                 this.props.client.writeData({

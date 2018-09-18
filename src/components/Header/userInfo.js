@@ -1,7 +1,5 @@
 import React from 'react';
 import gql from 'graphql-tag';
-// import Avatar from '@material-ui/core/Avatar';
-// import GithubSignin from '../SigninLink/githubSignin';
 import { Query } from 'react-apollo';
 import { Button } from '@material-ui/core';
 import blog_config from '../../config/blog.config';
