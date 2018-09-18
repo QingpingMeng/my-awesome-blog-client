@@ -9,11 +9,14 @@ COPY package.json /src/app/package.json
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
-RUN npm install
+RUN npm install -g -s --no-progress yarn && \
+    yarn && \
+    yarn run build && \
+    yarn cache clean
 
 COPY . /src/app
 
-RUN npm run build
+RUN yarn run build
 
 FROM nginx:alpine
 
