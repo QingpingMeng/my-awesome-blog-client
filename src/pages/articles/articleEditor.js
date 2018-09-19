@@ -6,7 +6,7 @@ import { Mutation, withApollo } from 'react-apollo';
 import { withRouter } from 'react-router';
 
 import * as styles from './articleEditor.module.css';
-// import RichTextEditor from '../../components/Editor/editor';
+import RichTextEditor from '../../components/Editor/editor';
 import StatefulButton from '../../components/Button/statefulButton';
 import { ArticleInput } from '../../models/articles.model';
 import gql from 'graphql-tag';
@@ -191,11 +191,11 @@ class ArticleEditor extends React.Component {
                 <div className={styles.leftSpace} />
                 <Paper className={styles.paper} elevation={1}>
                     <div className={styles.editor}>
-                        {/* <RichTextEditor
+                        <RichTextEditor
                             value={this.state.value}
                             renderNode={this.renderNode}
                             onChange={this.onChange}
-                        /> */}
+                        />
                     </div>
 
                     <Mutation
