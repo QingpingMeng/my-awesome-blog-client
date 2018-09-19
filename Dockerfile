@@ -1,11 +1,11 @@
 FROM node:alpine as builder
 
-RUN mkdir -p /src/app
+RUN mkdir -p /app
 
-WORKDIR /src/app
+WORKDIR /app
 
-COPY package.json /src/app/package.json
-COPY yarn.lock /src/app/yarn.lock
+COPY package.json /app/package.json
+COPY yarn.lock /app/yarn.lock
 
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
@@ -13,11 +13,11 @@ RUN apk update && apk upgrade && \
 RUN npm install -g -s --no-progress yarn && \
     yarn 
 
-COPY . /src/app
+COPY . /app
 
 RUN yarn run build && \
     yarn cache clean
 
 FROM nginx:alpine
 
-COPY --from=builder /src/app/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
