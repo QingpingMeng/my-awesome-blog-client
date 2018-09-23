@@ -1,0 +1,2 @@
+window.API_HOST = window.API_HOST_VALUE;
+window.GITHUB_CLIENT_ID = window.GITHUB_CLIENT_ID_VALUE;

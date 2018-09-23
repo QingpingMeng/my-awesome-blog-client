@@ -21,3 +21,7 @@ RUN yarn run build && \
 FROM nginx:alpine
 
 COPY --from=builder /app/build /usr/share/nginx/html
+
+CMD sed -i -e "s/window.API_HOST_VALUE/'"$API_HOST"'/" /usr/share/nginx/html/config.js && \
+    sed -i -e "s/window.GITHUB_CLIENT_ID_VALUE/'"$GITHUB_CLIENT_ID_VALUE"'/" /usr/share/nginx/html/config.js && \
+     nginx -g 'daemon off;'
