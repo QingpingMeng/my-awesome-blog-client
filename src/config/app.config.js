@@ -1,4 +1,7 @@
-export const serverEndpoint = window.API_HOST ? `http://${window.API_HOST}` : 'http://localhost:4000';
+export const serverEndpoint =
+    process.env.NODE_ENV === 'production'
+        ? `http://api.qingping.me`
+        : 'http://localhost:3000';
 
 export const graphQLEndpoint = `${serverEndpoint}/graphql`;
 
