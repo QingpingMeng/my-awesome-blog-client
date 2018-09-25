@@ -37,7 +37,8 @@ class App extends React.Component {
                     user: { ...data.currentUser, isLoggedIn: true }
                 }
             });
-        });
+        })
+        .catch();
     }
 
     render() {
