@@ -5,7 +5,7 @@ export const serverEndpoint =
 
 export const graphQLEndpoint = `${serverEndpoint}/graphql`;
 
-export const authSignInEdnpoint = `${serverEndpoint}/signin;`;
+export const authSignInEdnpoint = `${serverEndpoint}/signin`;
 
 export const githubClientId =
     process.env.NODE_ENV === 'production'
