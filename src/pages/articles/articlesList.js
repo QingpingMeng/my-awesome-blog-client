@@ -41,10 +41,14 @@ class ArticlesList extends Component {
                     notifyOnNetworkStatusChange={true}
                     variables={{ offset: 0, limit: PAGE_LIMIT }}
                 >
-                    {({ loading, data, fetchMore, networkStatus }) => {
+                    {({ loading, data, error, fetchMore, networkStatus }) => {
                         const loadingMore = networkStatus === 3;
                         if (loading && !loadingMore) {
                             return <LinearProgress />;
+                        }
+
+                        if(error){
+                            return null;
                         }
 
                         const previews = data.queryArticles.map(article => (
