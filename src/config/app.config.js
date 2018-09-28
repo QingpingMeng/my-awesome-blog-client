@@ -1,6 +1,6 @@
 export const serverEndpoint =
     process.env.NODE_ENV === 'production'
-        ? `http://api.qingping.me`
+        ? `https://api.qingping.me`
         : 'http://localhost:3000';
 
 export const graphQLEndpoint = `${serverEndpoint}/graphql`;
