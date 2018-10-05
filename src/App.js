@@ -12,6 +12,8 @@ import Login from './pages/auth/login';
 import { withApollo } from 'react-apollo';
 import About from './pages/about'
 import gql from 'graphql-tag';
+import PrivateRoute from './components/Route/privateRoute';
+import Redirect from 'react-router/Redirect';
 
 const CURRENT_USER = gql`
     {
@@ -55,12 +57,12 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path="/" component={ArticlesList} />
                             <Route path="/login" component={Login} />
-                            <Route
+                            <PrivateRoute
                                 exact
                                 path="/articles/editor/"
                                 component={ArticleEditor}
                             />
-                            <Route
+                            <PrivateRoute
                                 path="/articles/editor/:slug"
                                 component={ArticleEditor}
                             />
@@ -78,6 +80,7 @@ class App extends React.Component {
                                 path="/about"
                                 component={About}
                             />
+                            <Redirect to="/" />
                         </Switch>
                         <div />
                     </div>
