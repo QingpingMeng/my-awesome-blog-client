@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Button } from '@material-ui/core';
-import blog_config from '../../config/blog.config';
+import blog_config from '../../../config/blog.config';
 import withRouter from 'react-router/withRouter';
 
 export const CURRENT_USER_EMAIL = gql`
@@ -37,11 +37,13 @@ class UserInfo extends React.Component {
 
                     return (
                         <Button
+                            color="secondary"
+                            size="medium"
                             onClick={() => {
                                 this.props.history.push('/articles/editor');
                             }}
                         >
-                            New Post{' '}
+                            New Post
                         </Button>
                     );
                 }}

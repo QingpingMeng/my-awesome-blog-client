@@ -3,6 +3,7 @@ import React from 'react';
 export default {
     serialize(obj, children) {
         if (obj.object === 'inline') {
+            console.log(obj.type);
             switch (obj.type.toLowerCase()) {
                 case 'link':
                     return (

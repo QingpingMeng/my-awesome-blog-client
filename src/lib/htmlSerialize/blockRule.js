@@ -3,11 +3,12 @@ import React from 'react';
 export default  {
     serialize(obj, children) {
         if (obj.object === 'block') {
+            console.log(obj.type);
             switch (obj.type) {
                 case 'hr':
                     return <hr />;
                 case 'code_line':
-                    return <span>{children}</span>;
+                    return <p><span>{children}</span></p>;
                 case 'code_block':
                     return (
                         <pre>
