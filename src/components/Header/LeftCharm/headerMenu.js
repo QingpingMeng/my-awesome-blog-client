@@ -22,7 +22,6 @@ class LeftHeaderMenu extends Component {
 
     render() {
         const { width } = this.props;
-        console.log(width);
         const buttonSize = width === 'xs' ? 'medium' : 'large';
         const buttons = (
             <React.Fragment>

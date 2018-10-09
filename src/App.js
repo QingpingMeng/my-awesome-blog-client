@@ -31,8 +31,17 @@ const SET_LOCAL_USER = gql`
 `;
 
 class App extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            isLoggedIn: false
+        };
+    }
+
     componentDidMount() {
         this.props.client.query({ query: CURRENT_USER }).then(({ data }) => {
+            this.setState({isLoggedIn: true});
             return this.props.client.mutate({
                 mutation: SET_LOCAL_USER,
                 variables: {
@@ -58,11 +67,13 @@ class App extends React.Component {
                             <Route exact path="/" component={ArticlesList} />
                             <Route path="/login" component={Login} />
                             <PrivateRoute
+                                isLoggedIn={this.state.isLoggedIn}
                                 exact
                                 path="/articles/editor/"
                                 component={ArticleEditor}
                             />
                             <PrivateRoute
+                                isLoggedIn={this.state.isLoggedIn}
                                 path="/articles/editor/:slug"
                                 component={ArticleEditor}
                             />
