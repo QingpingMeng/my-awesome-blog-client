@@ -8,7 +8,7 @@ export default  {
                 case 'hr':
                     return <hr />;
                 case 'code_line':
-                    return <p><span>{children}</span></p>;
+                    return <div>{children}</div>;
                 case 'code_block':
                     return (
                         <pre>
@@ -36,7 +36,7 @@ export default  {
                 case 'paragraph':
                     const style = {};
                     if (obj.data.get('align')) {
-                        style.textAlign = obj.get.get('align');
+                        style.textAlign = obj.data.get('align');
                     }
 
                     // 3rem padding left per 1 indent

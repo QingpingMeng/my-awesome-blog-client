@@ -7,6 +7,8 @@ export default  {
             switch (obj.type.toLowerCase()) {
                 case 'bold':
                     return <strong>{children}</strong>;
+                case 'code':
+                    return <code>{children}</code>
                 case 'italic':
                     return <em>{children}</em>;
                 case 'underline':
