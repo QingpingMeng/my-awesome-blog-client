@@ -9,7 +9,7 @@ import moment from 'moment';
 import EditIcon from '@material-ui/icons/Edit';
 import './articleDetail.css';
 import DeleteArticleButton from '../../components/Articles/deleteArticleButton';
-import { syntaxHighlight } from '../../lib/syntaxHighligher';
+import { syntaxHighlight } from '../../lib/syntaxHighlighter';
 
 export const ARTICLE_DETAIL_QUERY = gql`
     query GetArticle($condition: String!) {
