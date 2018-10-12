@@ -7,9 +7,9 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { withRouter } from 'react-router';
 import moment from 'moment';
 import EditIcon from '@material-ui/icons/Edit';
-import Prism from 'prismjs';
 import './articleDetail.css';
 import DeleteArticleButton from '../../components/Articles/deleteArticleButton';
+import { syntaxHighlight } from '../../lib/syntaxHighligher';
 
 export const ARTICLE_DETAIL_QUERY = gql`
     query GetArticle($condition: String!) {
@@ -36,8 +36,26 @@ const CURRENT_USER_ID = gql`
 `;
 
 class ArticleDetail extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            syntaxHighlighted: false
+        };
+    }
+
     onDeletedSuccess = () => {
         this.props.history.replace('/');
+    };
+
+    syntaxHighlight = root => {
+        if (this.state.syntaxHighlighted || !root) {
+            return;
+        }
+        syntaxHighlight(root);
+        this.setState({
+            syntaxHighlighted: true
+        });
     };
 
     render() {
@@ -60,16 +78,13 @@ class ArticleDetail extends Component {
                         );
                     }
 
-                    const { email:authorEmail } = data.queryArticle.author;
+                    const { email: authorEmail } = data.queryArticle.author;
                     if (!data.queryArticle) {
                         return (
                             <div
                                 style={{
                                     padding: '2rem'
                                 }}
-                                ref={element =>
-                                    element && Prism.highlightAllUnder(element)
-                                }
                                 className="markdown-body"
                                 dangerouslySetInnerHTML={{
                                     __html: `<h1>Article not found</h1>`
@@ -93,9 +108,9 @@ class ArticleDetail extends Component {
                                 style={{
                                     padding: '2rem'
                                 }}
-                                ref={element =>
-                                    element && Prism.highlightAllUnder(element)
-                                }
+                                ref={element => {
+                                    this.syntaxHighlight(element);
+                                }}
                                 className="markdown-body"
                                 dangerouslySetInnerHTML={{
                                     __html: data.queryArticle.body
@@ -107,7 +122,11 @@ class ArticleDetail extends Component {
                                     data: userData,
                                     error: loadingUserError
                                 }) => {
-                                    if (loadingUser || loadingUserError || !userData.authStore) {
+                                    if (
+                                        loadingUser ||
+                                        loadingUserError ||
+                                        !userData.authStore
+                                    ) {
                                         return null;
                                     }
 
