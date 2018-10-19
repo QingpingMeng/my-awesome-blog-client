@@ -1,18 +1,12 @@
 import * as React from 'react';
 import Header from './components/Header/header';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, CircularProgress } from '@material-ui/core';
 import { Switch, Route } from 'react-router';
-import AuthCallback from './pages/auth/callback';
+import Loadable from 'react-loadable';
 
 import * as styles from './App.module.css';
-import ArticleEditor from './pages/articles/articleEditor';
-import ArticleDetail from './pages/articles/articleDetail';
-import ArticlesList from './pages/articles/articlesList';
-import Login from './pages/auth/login';
 import { withApollo } from 'react-apollo';
-import About from './pages/about'
 import gql from 'graphql-tag';
-import PrivateRoute from './components/Route/privateRoute';
 import Redirect from 'react-router/Redirect';
 
 const CURRENT_USER = gql`
@@ -29,6 +23,41 @@ const SET_LOCAL_USER = gql`
         setCurrentUser(user: $user) @client
     }
 `;
+
+const AsyncArticleEditor = Loadable({
+    loader: () => import('./pages/articles/articleEditor'),
+    loading: CircularProgress
+})
+
+const AsyncArticleDetail = Loadable({
+    loader: () => import('./pages/articles/articleDetail'),
+    loading: CircularProgress
+})
+
+const AsyncArticleList = Loadable({
+    loader: () => import('./pages/articles/articlesList'),
+    loading: CircularProgress
+})
+
+const AsyncLogin = Loadable({
+    loader: () => import('./pages/auth/login'),
+    loading: CircularProgress
+})
+
+const AsyncAbout = Loadable({
+    loader: () => import('./pages/about'),
+    loading: CircularProgress
+})
+
+const AsyncAuthCallback = Loadable({
+    loader: () => import('./pages/auth/callback'),
+    loading: CircularProgress
+})
+
+const AsyncPrivateRoute = Loadable({
+    loader: () => import('./components/Route/privateRoute'),
+    loading: CircularProgress
+})
 
 class App extends React.Component {
     constructor(props){
@@ -64,32 +93,32 @@ class App extends React.Component {
                     <div className={styles.mainview}>
                         <div />
                         <Switch>
-                            <Route exact path="/" component={ArticlesList} />
-                            <Route path="/login" component={Login} />
-                            <PrivateRoute
+                            <Route exact path="/" component={AsyncArticleList} />
+                            <Route path="/login" component={AsyncLogin} />
+                            <AsyncPrivateRoute
                                 isLoggedIn={this.state.isLoggedIn}
                                 exact
                                 path="/articles/editor/"
-                                component={ArticleEditor}
+                                component={AsyncArticleEditor}
                             />
-                            <PrivateRoute
+                            <AsyncPrivateRoute
                                 isLoggedIn={this.state.isLoggedIn}
                                 path="/articles/editor/:slug"
-                                component={ArticleEditor}
+                                component={AsyncArticleEditor}
                             />
                             <Route
                                 path="/articles/:slug"
-                                component={ArticleDetail}
+                                component={AsyncArticleDetail}
                             />
                             <Route
                                 exact
                                 path="/auth/callback"
-                                component={AuthCallback}
+                                component={AsyncAuthCallback}
                             />
                              <Route
                                 exact
                                 path="/about"
-                                component={About}
+                                component={AsyncAbout}
                             />
                             <Redirect to="/" />
                         </Switch>
