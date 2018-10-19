@@ -78,6 +78,22 @@ class ArticleDetail extends Component {
                         );
                     }
 
+                    if (error) {
+                        return (
+                            <div
+                                style={{
+                                    padding: '2rem'
+                                }}
+                                className="markdown-body"
+                            >
+                                <h1>
+                                    Something went wrong. Article could not be
+                                    feteched.
+                                </h1>
+                            </div>
+                        );
+                    }
+
                     const { email: authorEmail } = data.queryArticle.author;
                     if (!data.queryArticle) {
                         return (
@@ -86,10 +102,9 @@ class ArticleDetail extends Component {
                                     padding: '2rem'
                                 }}
                                 className="markdown-body"
-                                dangerouslySetInnerHTML={{
-                                    __html: `<h1>Article not found</h1>`
-                                }}
-                            />
+                            >
+                                <h1>Article not found.</h1>
+                            </div>
                         );
                     }
 

@@ -49,7 +49,7 @@ class App extends React.Component {
                 }
             });
         })
-        .catch();
+        .catch(error => {});
     }
 
     render() {
