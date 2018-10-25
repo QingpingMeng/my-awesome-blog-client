@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Hidden } from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import DrawerMenu from './drawer';
-import UserInfo from './userInfo';
+// import UserInfo from './userInfo';
 import { withRouter } from 'react-router';
 
 class LeftHeaderMenu extends Component {
@@ -46,7 +46,7 @@ class LeftHeaderMenu extends Component {
                 >
                     About
                 </Button>
-                <UserInfo />
+                {/* <UserInfo /> */}
             </React.Fragment>
         );
         return (

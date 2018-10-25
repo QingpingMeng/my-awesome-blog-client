@@ -24,31 +24,27 @@
     "react-router-dom": "^4.3.1",
     "slate": "0.33",
     "slate-html-serializer": "^0.7.2",
-    "slate-react": "0.12"
+    "slate-react": "0.12",
+    "gatsby": "^2.0.19",
+    "gatsby-image": "^2.0.15",
+    "gatsby-plugin-manifest": "^2.0.5",
+    "gatsby-plugin-offline": "^2.0.5",
+    "gatsby-plugin-react-helmet": "^3.0.0",
+    "gatsby-plugin-sharp": "^2.0.7",
+    "gatsby-source-filesystem": "^2.0.4",
+    "gatsby-transformer-sharp": "^2.1.4",
+    "react-helmet": "^5.2.0"
   },
   "devDependencies": {
     "react-scripts": "2.0.5",
-    "source-map-explorer": "^1.6.0"
+    "source-map-explorer": "^1.6.0",
+    "prettier": "^1.14.2"
   },
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
-    "analyze:vendors": "source-map-explorer build/static/js/vendors.*",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "flow": "flow"
-  },
-  "browserslist": {
-    "development": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 2 edge versions"
-    ],
-    "production": [
-      ">0.25%",
-      "not op_mini all",
-      "ie 11"
-    ]
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"src/**/*.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
