@@ -1,0 +1,4 @@
+.listContainer{
+    display: grid;
+    grid-row-gap: 2rem;
+}

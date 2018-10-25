@@ -4,7 +4,6 @@ import gql from 'graphql-tag';
 import ArticlePreview from '../../components/Articles/articlePreview';
 import { LinearProgress } from '@material-ui/core';
 import * as styles from './articlesList.module.css';
-import { withRouter } from 'react-router';
 import StatefullButton from '../../components/Button/statefulButton';
 
 export const PAGE_LIMIT = 10;
@@ -28,10 +27,6 @@ class ArticlesList extends Component {
             hasReachedToBottom: false
         };
     }
-
-    readMore = slug => {
-        this.props.history.push(`/articles/${slug}`);
-    };
 
     render() {
         return (
@@ -110,4 +105,4 @@ class ArticlesList extends Component {
     }
 }
 
-export default withRouter(ArticlesList);
+export default ArticlesList;

@@ -3,7 +3,6 @@ import { Button, Hidden } from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import DrawerMenu from './drawer';
 // import UserInfo from './userInfo';
-import { withRouter } from 'react-router';
 
 class LeftHeaderMenu extends Component {
     constructor(props) {
@@ -66,4 +65,4 @@ class LeftHeaderMenu extends Component {
     }
 }
 
-export default withRouter(withWidth()(LeftHeaderMenu));
+export default withWidth()(LeftHeaderMenu);
