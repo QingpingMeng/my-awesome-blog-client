@@ -7,6 +7,7 @@ import { authStore } from '../stores/authStore';
 import { merge } from 'lodash';
 import { graphQLEndpoint } from '../config/app.config';
 
+
 let apolloClient = null;
 
 const authMiddleware = new ApolloLink((operation, forward) => {
