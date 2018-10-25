@@ -7,13 +7,19 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import 'github-markdown-css';
+import { navigate } from "gatsby"
 
 export default class ArticlePreview extends Component {
+    onReadMore() {
+        navigate(`/article/${this.props.slug}`)
+    }
+
     render() {
         return (
             <Card raised={false}>
                 <CardActionArea
-                    onClick={this.props.onReadMore}
+                    role="link"
+                    onClick={this.onReadMore}
                     style={{ width: '100%'}}
                 >
                     <CardContent>

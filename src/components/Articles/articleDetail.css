@@ -1,0 +1,14 @@
+.markdown-body .summary {
+    opacity: 0.7;
+    font-size: 1.1rem;
+}
+
+.markdown-body .title {
+    font-size: 2.3rem;
+}
+
+.markdown-body {
+    font-family: 'Work Sans', sans-serif, 'Segoe UI', 'Roboto', 'Helvetica Neue',
+        Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+}
