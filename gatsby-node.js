@@ -9,15 +9,14 @@ exports.createPages = ({ graphql, actions }) => {
             queryArticles {
                 slug
                 createdAt
-                title
-                summary
+                body
             }
         }
     }
       `).then(result => {
         result.data.server.queryArticles.forEach(article => {
           createPage({
-            path: article.slug,
+            path: `/articles/${article.slug}`,
             component: path.resolve(`./src/components/Articles/articleDetail.js`),
             context: {
               // Data passed to context is available

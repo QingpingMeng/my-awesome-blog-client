@@ -5,7 +5,6 @@ import ArticlePreview from './articlePreview'
 export default function articlesList( {articles}) {
     const previews = articles.map(article => (
         <ArticlePreview
-            onReadMore={() => this.readMore(article.slug)}
             key={article.slug}
             {...article}
         />

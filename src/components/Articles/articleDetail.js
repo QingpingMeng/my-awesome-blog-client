@@ -27,7 +27,8 @@ class ArticleDetail extends Component {
     }
 
     render() {
-        const article = this.props.pageContext.article
+        const article = this.props.pageContext.article;
+        console.log(article);
         return (
             <Layout>
                 <Paper elevation={1}>

@@ -10,8 +10,14 @@ import 'github-markdown-css';
 import { navigate } from "gatsby"
 
 export default class ArticlePreview extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onReadMore = this.onReadMore.bind(this);
+    }
+
     onReadMore() {
-        navigate(`/article/${this.props.slug}`)
+        navigate(`/articles/${this.props.slug}`)
     }
 
     render() {
