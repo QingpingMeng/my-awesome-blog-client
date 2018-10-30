@@ -25,7 +25,7 @@ const theme = createMuiTheme({
       },
 })
 
-const app = (
+export const app = (
     <ApolloProvider client={initApollo()}>
         <BrowserRouter>
             <MuiThemeProvider theme={theme}>
@@ -36,4 +36,8 @@ const app = (
 );
 
 ReactDOM.render(app, document.getElementById('root'));
-registerServiceWorker();
+
+// if(window)
+// {
+//     registerServiceWorker()
+// }
