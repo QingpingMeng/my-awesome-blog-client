@@ -1,4 +1,4 @@
-FROM node:alpine as builder
+FROM node:alpine
 
 RUN mkdir -p /app
 
@@ -18,8 +18,4 @@ COPY . /app
 RUN yarn run build && \
     yarn cache clean
 
-FROM nginx:alpine
-
-COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-
-COPY --from=builder /app/build /usr/share/nginx/html
+CMD ["yarn", "serve"]
