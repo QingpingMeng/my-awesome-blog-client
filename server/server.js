@@ -12,24 +12,7 @@ import loader from './loader';
 
 // Create our express app using the port optionally specified
 const app = express();
-const PORT = process.env.PORT || 3008;
-
-// NOTE: UNCOMMENT THIS IF YOU WANT THIS FUNCTIONALITY
-/*
-  Forcing www and https redirects in production, totally optional.
-  http://mydomain.com
-  http://www.mydomain.com
-  https://mydomain.com
-  Resolve to: https://www.mydomain.com
-*/
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(
-//     forceDomain({
-//       hostname: 'www.mydomain.com',
-//       protocol: 'https'
-//     })
-//   );
-// }
+const PORT = process.env.PORT || 3000;
 
 // Compress, parse, log, and raid the cookie jar
 app.use(compression());
@@ -44,27 +27,27 @@ app.use(loader);
 
 // We tell React Loadable to load all required assets and start listening - ROCK AND ROLL!
 Loadable.preloadAll().then(() => {
-  app.listen(PORT, console.log(`App listening on port ${PORT}!`));
+    app.listen(PORT, console.log(`App listening on port ${PORT}!`));
 });
 
 // Handle the bugs somehow
 app.on('error', error => {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  const bind = typeof PORT === 'string' ? 'Pipe ' + PORT : 'Port ' + PORT;
+    const bind = typeof PORT === 'string' ? 'Pipe ' + PORT : 'Port ' + PORT;
 
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 });

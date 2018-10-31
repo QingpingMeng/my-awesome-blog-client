@@ -24,12 +24,14 @@
     "react-dom": "^16.4.2",
     "react-frontload": "^1.0.3",
     "react-helmet": "^5.2.0",
+    "react-jss": "^8.6.1",
     "react-loadable": "^5.5.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "slate": "0.33",
     "slate-html-serializer": "^0.7.2",
-    "slate-react": "0.12"
+    "slate-react": "0.12",
+    "styled-components": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

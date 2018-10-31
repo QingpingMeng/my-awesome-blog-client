@@ -9,11 +9,17 @@ import Helmet from 'react-helmet';
 import { StaticRouter } from 'react-router';
 import { Frontload, frontloadServerRender } from 'react-frontload';
 import Loadable from 'react-loadable';
+import { SheetsRegistry } from 'jss';
+import JssProvider from 'react-jss/lib/JssProvider';
 
 // Our store, entrypoint, and manifest
 import App from '../src/App';
 import manifest from '../build/asset-manifest.json';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import {
+    MuiThemeProvider,
+    createMuiTheme,
+    createGenerateClassName
+} from '@material-ui/core';
 import { ApolloProvider } from 'react-apollo';
 import initApollo from '../src/lib/init-apollo';
 
@@ -43,8 +49,9 @@ export default (req, res) => {
       - SEO meta tags
       - Preloaded state (for Redux) depending on the current route
       - Code-split script tags depending on the current route
+      - extra styles required for 3rd party ui library on first load (e.g. Material UI)
   */
-    const injectHTML = (data, { html, title, meta, body, scripts }) => {
+    const injectHTML = (data, { html, title, meta, body, scripts, styles }) => {
         data = data.replace('<html>', `<html ${html}>`);
         data = data.replace(/<title>.*?<\/title>/g, title);
         data = data.replace('</head>', `${meta}</head>`);
@@ -53,9 +60,21 @@ export default (req, res) => {
             `<div id="root">${body}</div>`
         );
         data = data.replace('</body>', scripts.join('') + '</body>');
-
+        data = data.replace(
+            '</body>',
+            `<style id="jss-server-side">${styles}</style></body>`
+        );
         return data;
     };
+
+    // Create a sheetsRegistry instance.
+    const sheetsRegistry = new SheetsRegistry();
+
+    // Create a sheetsManager instance.
+    const sheetsManager = new Map();
+
+    // Create a new class name generator.
+    const generateClassName = createGenerateClassName();
 
     // Load in our HTML file from our build
     fs.readFile(
@@ -91,9 +110,17 @@ export default (req, res) => {
                         <StaticRouter location={req.url} context={context}>
                             <Frontload isServer={true}>
                                 <ApolloProvider client={initApollo()}>
-                                    <MuiThemeProvider theme={theme}>
-                                        <App />
-                                    </MuiThemeProvider>
+                                    <JssProvider
+                                        registry={sheetsRegistry}
+                                        generateClassName={generateClassName}
+                                    >
+                                        <MuiThemeProvider
+                                            theme={theme}
+                                            sheetsManager={sheetsManager}
+                                        >
+                                            <App />
+                                        </MuiThemeProvider>
+                                    </JssProvider>
                                 </ApolloProvider>
                             </Frontload>
                         </StaticRouter>
@@ -136,13 +163,16 @@ export default (req, res) => {
                     // Let's output the title, just to see SSR is working as intended
                     console.log('THE TITLE', helmet.title.toString());
 
+                    // Grab the CSS from our sheetsRegistry.
+                    const materialUIStyles = sheetsRegistry.toString();
                     // Pass all this nonsense into our HTML formatting function above
                     const html = injectHTML(htmlData, {
                         html: helmet.htmlAttributes.toString(),
                         title: helmet.title.toString(),
                         meta: helmet.meta.toString(),
                         body: routeMarkup,
-                        scripts: extraChunks
+                        scripts: extraChunks,
+                        styles: materialUIStyles
                     });
 
                     // We have all the final HTML, let's send it to the user already!
