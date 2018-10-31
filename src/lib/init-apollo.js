@@ -10,7 +10,7 @@ import { graphQLEndpoint } from '../config/app.config';
 let apolloClient = null;
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-    if (localStorage.getItem('jwt')) {
+    if (localStorage && localStorage.getItem('jwt')) {
         operation.setContext(({ headers = {} }) => ({
             headers: {
                 ...headers,
@@ -22,8 +22,8 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     return forward(operation);
 });
 
-function create(initialState) {
-    const cache = new InMemoryCache().restore(initialState || {});
+export function createApolloClient(initialState, ssr = false) {
+    const cache = new InMemoryCache().restore(initialState || window.__APOLLO_STATE__ || {});
     const localLink = withClientState({
         ...merge(authStore),
         cache
@@ -33,8 +33,14 @@ function create(initialState) {
         fetch
     });
 
+    const links = [localLink, httpLink];
+    if(!ssr){
+        links.unshift(authMiddleware);
+    }
+
     return new ApolloClient({
-        link: ApolloLink.from([authMiddleware, localLink, httpLink]),
+        ssrMode: ssr,
+        link: ApolloLink.from(links),
         cache: cache
     });
 }
@@ -42,7 +48,7 @@ function create(initialState) {
 export default function initApollo(initialState) {
     // Reuse client on the client-side
     if (!apolloClient) {
-        apolloClient = create(initialState);
+        apolloClient = createApolloClient(initialState);
     }
 
     return apolloClient;

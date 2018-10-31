@@ -4,13 +4,12 @@ import fs from 'fs';
 
 // React requirements
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
 import { StaticRouter } from 'react-router';
-import { Frontload, frontloadServerRender } from 'react-frontload';
 import Loadable from 'react-loadable';
 import { SheetsRegistry } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
+import { renderToStringWithData } from 'react-apollo';
 
 // Our store, entrypoint, and manifest
 import App from '../src/App';
@@ -21,7 +20,8 @@ import {
     createGenerateClassName
 } from '@material-ui/core';
 import { ApolloProvider } from 'react-apollo';
-import initApollo from '../src/lib/init-apollo';
+import { createApolloClient } from '../src/lib/init-apollo';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 // Theme
 const theme = createMuiTheme({
@@ -51,7 +51,10 @@ export default (req, res) => {
       - Code-split script tags depending on the current route
       - extra styles required for 3rd party ui library on first load (e.g. Material UI)
   */
-    const injectHTML = (data, { html, title, meta, body, scripts, styles }) => {
+    const injectHTML = (
+        data,
+        { html, title, meta, body, scripts, styles, initialState }
+    ) => {
         data = data.replace('<html>', `<html ${html}>`);
         data = data.replace(/<title>.*?<\/title>/g, title);
         data = data.replace('</head>', `${meta}</head>`);
@@ -60,6 +63,12 @@ export default (req, res) => {
             `<div id="root">${body}</div>`
         );
         data = data.replace('</body>', scripts.join('') + '</body>');
+        data = data.replace(
+            '</body>',
+            `<script>window.__APOLLO_STATE__=${JSON.stringify(
+                initialState
+            ).replace(/</g, '\\u003c')}</script> </body>`
+        );
         data = data.replace(
             '</body>',
             `<style id="jss-server-side">${styles}</style></body>`
@@ -75,6 +84,9 @@ export default (req, res) => {
 
     // Create a new class name generator.
     const generateClassName = createGenerateClassName();
+
+    // styled components
+    const sheet = new ServerStyleSheet();
 
     // Load in our HTML file from our build
     fs.readFile(
@@ -104,29 +116,34 @@ export default (req, res) => {
         data for that page. We take all that information and compute the appropriate state to send to the user. This is
         then loaded into the correct components and sent as a Promise to be handled below.
       */
-            frontloadServerRender(() =>
-                renderToString(
-                    <Loadable.Capture report={m => modules.push(m)}>
-                        <StaticRouter location={req.url} context={context}>
-                            <Frontload isServer={true}>
-                                <ApolloProvider client={initApollo()}>
-                                    <JssProvider
-                                        registry={sheetsRegistry}
-                                        generateClassName={generateClassName}
-                                    >
-                                        <MuiThemeProvider
-                                            theme={theme}
-                                            sheetsManager={sheetsManager}
-                                        >
-                                            <App />
-                                        </MuiThemeProvider>
-                                    </JssProvider>
-                                </ApolloProvider>
-                            </Frontload>
-                        </StaticRouter>
-                    </Loadable.Capture>
-                )
-            ).then(routeMarkup => {
+            const apolloClient = createApolloClient({}, true);
+            const ServerEntry = (
+                <Loadable.Capture report={m => modules.push(m)}>
+                    <StaticRouter location={req.url} context={context}>
+                        {/* <Frontload isServer={true}> */}
+                        <ApolloProvider client={apolloClient}>
+                            <JssProvider
+                                registry={sheetsRegistry}
+                                generateClassName={generateClassName}
+                            >
+                                <MuiThemeProvider
+                                    theme={theme}
+                                    sheetsManager={sheetsManager}
+                                >
+                                    <StyleSheetManager sheet={sheet.instance}>
+                                        <App />
+                                    </StyleSheetManager>
+                                </MuiThemeProvider>
+                            </JssProvider>
+                        </ApolloProvider>
+                        {/* </Frontload> */}
+                    </StaticRouter>
+                </Loadable.Capture>
+            );
+
+            renderToStringWithData(ServerEntry).then(content => {
+                const initialState = apolloClient.extract();
+
                 if (context.url) {
                     // If context has a url property, then we need to handle a redirection in Redux Router
                     res.writeHead(302, {
@@ -165,20 +182,23 @@ export default (req, res) => {
 
                     // Grab the CSS from our sheetsRegistry.
                     const materialUIStyles = sheetsRegistry.toString();
+                    const stylesComponentsStyles = sheet.getStyleTags();
                     // Pass all this nonsense into our HTML formatting function above
                     const html = injectHTML(htmlData, {
                         html: helmet.htmlAttributes.toString(),
                         title: helmet.title.toString(),
                         meta: helmet.meta.toString(),
-                        body: routeMarkup,
+                        body: content,
                         scripts: extraChunks,
-                        styles: materialUIStyles
+                        styles: materialUIStyles + stylesComponentsStyles,
+                        initialState: initialState
                     });
 
                     // We have all the final HTML, let's send it to the user already!
                     res.send(html);
                 }
             });
+            // });
         }
     );
 };
