@@ -2,9 +2,9 @@ import * as React from 'react';
 import Header from './components/Header/header';
 import { CssBaseline, CircularProgress } from '@material-ui/core';
 import { Switch, Route } from 'react-router';
-import styled from 'styled-components';
 import Loadable from 'react-loadable';
 
+import * as styles from './App.module.css';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Redirect from 'react-router/Redirect';
@@ -27,61 +27,40 @@ const SET_LOCAL_USER = gql`
 const AsyncArticleEditor = Loadable({
     loader: () => import('./pages/articles/articleEditor'),
     loading: CircularProgress
-});
+})
 
 const AsyncArticleDetail = Loadable({
     loader: () => import('./pages/articles/articleDetail'),
     loading: CircularProgress
-});
+})
 
 const AsyncArticleList = Loadable({
     loader: () => import('./pages/articles/articlesList'),
     loading: CircularProgress
-});
+})
 
 const AsyncLogin = Loadable({
     loader: () => import('./pages/auth/login'),
     loading: CircularProgress
-});
+})
 
 const AsyncAbout = Loadable({
     loader: () => import('./pages/about'),
     loading: CircularProgress
-});
+})
 
 const AsyncAuthCallback = Loadable({
     loader: () => import('./pages/auth/callback'),
     loading: CircularProgress
-});
+})
 
 const AsyncPrivateRoute = Loadable({
     loader: () => import('./components/Route/privateRoute'),
     loading: CircularProgress
-});
-
-const Root = styled.div`
-    display: grid;
-    grid-template-rows: 64px 1fr;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-        'header'
-        'mainview';
-`;
-
-const HeaderContainer = styled.div`
-    grid-area: header;
-`;
-
-const MainView = styled.div`
-    grid-area: mainview;
-    grid-template-columns: 1fr minmax(200px, 60rem) 1fr;
-    padding: 1rem;
-    padding: 1rem;
-    display: grid;
-`;
+})
 
 class App extends React.Component {
-    constructor(props) {
+    constructor(props){
         super(props);
 
         this.state = {
@@ -90,37 +69,31 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.props.client
-            .query({ query: CURRENT_USER })
-            .then(({ data }) => {
-                this.setState({ isLoggedIn: true });
-                return this.props.client.mutate({
-                    mutation: SET_LOCAL_USER,
-                    variables: {
-                        user: { ...data.currentUser, isLoggedIn: true }
-                    }
-                });
-            })
-            .catch(error => {});
+        this.props.client.query({ query: CURRENT_USER }).then(({ data }) => {
+            this.setState({isLoggedIn: true});
+            return this.props.client.mutate({
+                mutation: SET_LOCAL_USER,
+                variables: {
+                    user: { ...data.currentUser, isLoggedIn: true }
+                }
+            });
+        })
+        .catch(error => {});
     }
 
     render() {
         return (
             <div>
                 <CssBaseline />
-                 <Root>
-                    <HeaderContainer>
+                <div className={styles.root}>
+                    <div className={styles.header}>
                         <Header />
-                    </HeaderContainer>
+                    </div>
 
-                    <MainView>
+                    <div className={styles.mainview}>
                         <div />
                         <Switch>
-                            <Route
-                                exact
-                                path="/"
-                                component={AsyncArticleList}
-                            />
+                            <Route exact path="/" component={AsyncArticleList} />
                             <Route path="/login" component={AsyncLogin} />
                             <AsyncPrivateRoute
                                 isLoggedIn={this.state.isLoggedIn}
@@ -142,12 +115,16 @@ class App extends React.Component {
                                 path="/auth/callback"
                                 component={AsyncAuthCallback}
                             />
-                            <Route exact path="/about" component={AsyncAbout} />
+                             <Route
+                                exact
+                                path="/about"
+                                component={AsyncAbout}
+                            />
                             <Redirect to="/" />
                         </Switch>
                         <div />
-                    </MainView>
-                </Root>
+                    </div>
+                </div>
             </div>
         );
     }

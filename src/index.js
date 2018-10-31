@@ -5,59 +5,35 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import registerServiceWorker from './registerServiceWorker';
-import JssProvider from 'react-jss/lib/JssProvider';
 import initApollo from './lib/init-apollo';
-import {
-    MuiThemeProvider,
-    createMuiTheme,
-    createGenerateClassName
-} from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
     typography: {
         // Use the system font instead of the default Roboto font.
         fontFamily: [
-            `'Work Sans',sans-serif`,
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"'
-        ].join(',')
-    }
-});
+          `'Work Sans',sans-serif`,
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ].join(','),
+      },
+})
 
-// Create a new class name generator.
-const generateClassName = createGenerateClassName();
-
-class ClientEntry extends React.Component {
-    componentDidMount() {
-        const jssStyles = document.getElementById('jss-server-side');
-        if (jssStyles && jssStyles.parentNode) {
-            jssStyles.parentNode.removeChild(jssStyles);
-        }
-    }
-
-    render() {
-        return <App />
-    }
-}
-
-export const app = (
+const app = (
     <ApolloProvider client={initApollo()}>
         <BrowserRouter>
-            <JssProvider generateClassName={generateClassName}>
-                <MuiThemeProvider theme={theme}>
-                    <ClientEntry />
-                </MuiThemeProvider>
-            </JssProvider>
+            <MuiThemeProvider theme={theme}>
+                <App />
+            </MuiThemeProvider>
         </BrowserRouter>
     </ApolloProvider>
 );
 
 ReactDOM.render(app, document.getElementById('root'));
-
 registerServiceWorker();
