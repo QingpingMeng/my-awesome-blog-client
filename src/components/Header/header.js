@@ -14,9 +14,9 @@ class Header extends React.Component {
         return (
             <AppBar position="fixed" color="light">
                 <Toolbar>
-                    <LeftHeaderMenu/>
+                    <LeftHeaderMenu />
                     <div style={{ flex: '1' }} />
-                    <RightCharm/>
+                    <RightCharm />
                 </Toolbar>
             </AppBar>
         );
