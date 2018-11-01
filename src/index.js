@@ -35,9 +35,9 @@ const generateClassName = createGenerateClassName();
 
 class ClientEntry extends React.Component {
     componentDidMount() {
-        const jssStyles = document.getElementById('jss-server-side');
-        if (jssStyles && jssStyles.parentNode) {
-            jssStyles.parentNode.removeChild(jssStyles);
+        const serverStyles = document.getElementById('styles-server-side');
+        if (serverStyles && serverStyles.parentNode) {
+            serverStyles.parentNode.removeChild(serverStyles);
         }
     }
 

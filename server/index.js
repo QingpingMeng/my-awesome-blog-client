@@ -10,6 +10,9 @@ const register = ignoreStyles.default;
 // When running on the server, we want to load via their hashed version in the build folder
 const extensions = ['.gif', '.jpeg', '.jpg', '.png', '.svg'];
 
+// Set node env default to production
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 // Override the default style ignorer, also modifying all image requests
 register(ignoreStyles.DEFAULT_EXTENSIONS, (mod, filename) => {
     if (!extensions.find(f => filename.endsWith(f))) {

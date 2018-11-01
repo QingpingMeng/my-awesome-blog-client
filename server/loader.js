@@ -7,8 +7,6 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { StaticRouter } from 'react-router';
 import Loadable from 'react-loadable';
-import { SheetsRegistry } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
 import { renderToStringWithData } from 'react-apollo';
 
 // Our store, entrypoint, and manifest
@@ -17,7 +15,6 @@ import manifest from '../build/asset-manifest.json';
 import {
     MuiThemeProvider,
     createMuiTheme,
-    createGenerateClassName
 } from '@material-ui/core';
 import { ApolloProvider } from 'react-apollo';
 import { createApolloClient } from '../src/lib/init-apollo';
@@ -71,19 +68,10 @@ export default (req, res) => {
         );
         data = data.replace(
             '</body>',
-            `<style id="jss-server-side">${styles}</style></body>`
+            `<style id="styles-server-side">${styles}</style></body>`
         );
         return data;
     };
-
-    // Create a sheetsRegistry instance.
-    const sheetsRegistry = new SheetsRegistry();
-
-    // Create a sheetsManager instance.
-    const sheetsManager = new Map();
-
-    // Create a new class name generator.
-    const generateClassName = createGenerateClassName();
 
     // styled components
     const sheet = new ServerStyleSheet();
@@ -120,23 +108,13 @@ export default (req, res) => {
             const ServerEntry = (
                 <Loadable.Capture report={m => modules.push(m)}>
                     <StaticRouter location={req.url} context={context}>
-                        {/* <Frontload isServer={true}> */}
                         <ApolloProvider client={apolloClient}>
-                            <JssProvider
-                                registry={sheetsRegistry}
-                                generateClassName={generateClassName}
-                            >
-                                <MuiThemeProvider
-                                    theme={theme}
-                                    sheetsManager={sheetsManager}
-                                >
-                                    <StyleSheetManager sheet={sheet.instance}>
-                                        <App />
-                                    </StyleSheetManager>
-                                </MuiThemeProvider>
-                            </JssProvider>
+                            <MuiThemeProvider theme={theme}>
+                                <StyleSheetManager sheet={sheet.instance}>
+                                    <App />
+                                </StyleSheetManager>
+                            </MuiThemeProvider>
                         </ApolloProvider>
-                        {/* </Frontload> */}
                     </StaticRouter>
                 </Loadable.Capture>
             );
@@ -180,8 +158,6 @@ export default (req, res) => {
                     // Let's output the title, just to see SSR is working as intended
                     console.log('THE TITLE', helmet.title.toString());
 
-                    // Grab the CSS from our sheetsRegistry.
-                    const materialUIStyles = sheetsRegistry.toString();
                     const stylesComponentsStyles = sheet.getStyleTags();
                     // Pass all this nonsense into our HTML formatting function above
                     const html = injectHTML(htmlData, {
@@ -190,7 +166,7 @@ export default (req, res) => {
                         meta: helmet.meta.toString(),
                         body: content,
                         scripts: extraChunks,
-                        styles: materialUIStyles + stylesComponentsStyles,
+                        styles: stylesComponentsStyles,
                         initialState: initialState
                     });
 

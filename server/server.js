@@ -20,6 +20,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
+// adding podname for diagnostic
+app.use(function(req, res, next) {
+    res.setHeader('X-PodName', process.env.POD_NAME || 'debug');
+    next();
+});
+
 // Set up homepage, static assets, and capture everything else
 app.use(express.Router().get('/', loader));
 app.use(express.static(path.resolve(__dirname, '../build')));
