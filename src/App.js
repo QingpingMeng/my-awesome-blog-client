@@ -4,6 +4,7 @@ import { CssBaseline, CircularProgress } from '@material-ui/core';
 import { Switch, Route } from 'react-router';
 import styled from 'styled-components';
 import Loadable from 'react-loadable';
+import { Helmet } from 'react-helmet';
 
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -107,8 +108,19 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <Helmet>
+                    <title>Qingping Meng </title>
+                    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+                    <meta name="robots" content="index, follow" />
+                    <meta charset="utf-8" />
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                    />
+                    <meta name="theme-color" content="#000000" />
+                </Helmet>
                 <CssBaseline />
-                 <Root>
+                <Root>
                     <HeaderContainer>
                         <Header />
                     </HeaderContainer>

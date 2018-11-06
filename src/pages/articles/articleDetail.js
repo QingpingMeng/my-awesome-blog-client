@@ -10,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import './articleDetail.css';
 import DeleteArticleButton from '../../components/Articles/deleteArticleButton';
 import { syntaxHighlight } from '../../lib/syntaxHighlighter';
+import {Helmet} from 'react-helmet';
 
 export const ARTICLE_DETAIL_QUERY = gql`
     query GetArticle($condition: String!) {
@@ -110,6 +111,10 @@ class ArticleDetail extends Component {
 
                     return (
                         <Paper elevation={1}>
+                            <Helmet>
+                                <title>{data.queryArticle.title}</title>
+                                <meta name="description" content={data.queryArticle.summary} />
+                            </Helmet>
                             <Typography
                                 align="right"
                                 color="textSecondary"

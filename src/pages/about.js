@@ -1,12 +1,17 @@
 import React from 'react';
 import 'github-markdown-css';
+import { Helmet } from 'react-helmet';
 
 export default () => {
     return (
         <div style={{ textAlign: 'center' }} className="markdown-body">
+            <Helmet>
+                <title>About</title>
+                <meta name="description" content="Hello, my name is Qingping Meng." />
+            </Helmet>
             <hr />
             <p>
-                Hello, My name is Qingping Meng. I am a software engineer at
+                Hello, my name is Qingping Meng. I am a software engineer at
                 Microsoft now.
             </p>
             <p>

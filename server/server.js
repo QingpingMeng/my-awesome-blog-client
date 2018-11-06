@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan('dev'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // adding podname for diagnostic
 app.use(function(req, res, next) {

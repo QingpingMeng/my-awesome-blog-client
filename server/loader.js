@@ -66,10 +66,10 @@ export default (req, res) => {
                 initialState
             ).replace(/</g, '\\u003c')}</script> </body>`
         );
-        data = data.replace(
-            '</body>',
-            `<style id="styles-server-side">${styles}</style></body>`
-        );
+        // data = data.replace(
+        //     '</body>',
+        //     `<style id="styles-server-side">${styles}</style></body>`
+        // );
         return data;
     };
 
@@ -153,10 +153,6 @@ export default (req, res) => {
 
                     // We need to tell Helmet to compute the right meta tags, title, and such
                     const helmet = Helmet.renderStatic();
-
-                    // NOTE: Disable if you desire
-                    // Let's output the title, just to see SSR is working as intended
-                    console.log('THE TITLE', helmet.title.toString());
 
                     const stylesComponentsStyles = sheet.getStyleTags();
                     // Pass all this nonsense into our HTML formatting function above
