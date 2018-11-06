@@ -4,6 +4,7 @@ import withWidth from '@material-ui/core/withWidth';
 import DrawerMenu from './drawer';
 import UserInfo from './userInfo';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class LeftHeaderMenu extends Component {
     constructor(props) {
@@ -23,27 +24,19 @@ class LeftHeaderMenu extends Component {
     render() {
         const { width } = this.props;
         const buttonSize = width === 'xs' ? 'medium' : 'large';
+        const HomeLink = props => <Link to="/" {...props} />;
+        const AboutLink = props => <Link to="/about" {...props} />;
         const buttons = (
             <React.Fragment>
                 <Button
                     type="flat"
                     size={buttonSize}
                     color="primary"
-                    onClick={() => {
-                        this.setState({ drawerOpen: false });
-                        this.props.history.push('/');
-                    }}
+                    component={HomeLink}
                 >
                     Home
                 </Button>
-                <Button
-                    color="primary"
-                    size={buttonSize}
-                    onClick={() => {
-                        this.props.history.push('/about');
-                        this.setState({ drawerOpen: false });
-                    }}
-                >
+                <Button color="primary" size={buttonSize} component={AboutLink}>
                     About
                 </Button>
                 <UserInfo />

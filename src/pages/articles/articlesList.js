@@ -6,6 +6,7 @@ import { LinearProgress } from '@material-ui/core';
 import * as styles from './articlesList.module.css';
 import { withRouter } from 'react-router';
 import StatefullButton from '../../components/Button/statefulButton';
+import { Helmet } from 'react-helmet';
 
 export const PAGE_LIMIT = 10;
 
@@ -36,6 +37,9 @@ class ArticlesList extends Component {
     render() {
         return (
             <div className={styles.listContainer}>
+                <Helmet>
+                    <title>Qingping Meng - All articles</title>
+                </Helmet>
                 <Query
                     query={LIST_ARTICLES}
                     notifyOnNetworkStatusChange={true}
@@ -47,9 +51,18 @@ class ArticlesList extends Component {
                             return <LinearProgress />;
                         }
 
-                        if(error){
+                        if (error) {
                             return null;
                         }
+
+                        const helmet = (
+                            <Helmet>
+                                <meta
+                                    name="description"
+                                    content="How I built this blog"
+                                />
+                            </Helmet>
+                        );
 
                         const previews = data.queryArticles.map(article => (
                             <ArticlePreview
@@ -102,7 +115,7 @@ class ArticlesList extends Component {
                             </StatefullButton>
                         );
 
-                        return [...previews, loadMoreButton];
+                        return [helmet, ...previews, loadMoreButton];
                     }}
                 </Query>
             </div>
