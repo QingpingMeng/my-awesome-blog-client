@@ -5,7 +5,8 @@ class SocialIcons extends Component {
     render() {
         const { width } = this.props;
         const imageStyle = {
-            maxWidth: width === 'xs' ? '75%' : '100%'
+            maxWidth: width === 'xs' ? '75%' : '100%',
+            width: width === 'xs'? '24px' : '32px'
         };
         return (
             <div>
