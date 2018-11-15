@@ -26,7 +26,13 @@ export const syntaxHighlight = root => {
             codeLine.innerHTML = Prism.highlight(
                 codeLine.innerHTML,
                 grammar
-            );
+            )
+          
+            if(syntax === 'html'){
+                codeLine.innerHTML = codeLine.innerHTML
+                .replace('&amp;lt;', '<')
+                .replace('&amp;gt;', '>');
+            }
         });
     });
 };
