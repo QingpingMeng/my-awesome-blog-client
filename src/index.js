@@ -58,6 +58,6 @@ export const app = (
     </ApolloProvider>
 );
 
-ReactDOM.render(app, document.getElementById('root'));
+ReactDOM.hydrate(app, document.getElementById('root'));
 
 registerServiceWorker();
