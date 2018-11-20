@@ -9,6 +9,13 @@ import { Helmet } from 'react-helmet';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Redirect from 'react-router/Redirect';
+import { withErrorBoundary } from './components/withErrorBoundary';
+
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({
+    dsn: 'https://5f9d3f665ab3421696ab5c5c63945c21@sentry.io/1308609'
+});
 
 const CURRENT_USER = gql`
     {
@@ -165,4 +172,4 @@ class App extends React.Component {
     }
 }
 
-export default withApollo(App);
+export default withErrorBoundary(withApollo(App));
