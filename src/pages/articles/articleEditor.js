@@ -1,23 +1,25 @@
-import { Paper, Button } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { Value } from 'slate';
 import React from 'react';
 import { slateHTMLSerialize } from '../../lib/htmlSerialize';
 import { Mutation, withApollo } from 'react-apollo';
 import { withRouter } from 'react-router';
+import { withSnackbar } from 'notistack';
 
 import * as styles from './articleEditor.module.css';
 import RichTextEditor from '../../components/Editor/editor';
 import StatefulButton from '../../components/Button/statefulButton';
 import { ArticleInput } from '../../models/articles.model';
 import gql from 'graphql-tag';
-import REFRESH_ARTICLE_LIST from '../../lib/queries/refreshList';
+import { Reload_Articles, Reload_Drafts } from '../../lib/queries/refreshList';
 import { ARTICLE_DETAIL_QUERY } from './articleDetail';
 
-const CREAT_ARTICLE = gql`
+const CREATE_ARTICLE = gql`
     mutation Create_Article($article: ArticleInput!) {
         createArticle(article: $article) {
             id
             slug
+            isDraft
         }
     }
 `;
@@ -27,6 +29,8 @@ const UPDATE_ARTICLE = gql`
         updateArticle(article: $article) {
             id
             slug
+            isDraft
+            updatedAt
         }
     }
 `;
@@ -35,6 +39,7 @@ const QUERY_ARTICLE_FOR_EDIT = gql`
     query GetArticle($condition: String!) {
         queryArticle(condition: $condition) {
             jsonBody
+            isDraft
         }
     }
 `;
@@ -67,7 +72,9 @@ class ArticleEditor extends React.Component {
         super(props);
 
         this.state = {
-            value: initialValue
+            value: initialValue,
+            editorStateSnapshot: initialValue,
+            intervalId: undefined
         };
 
         this.slug = this.props.match.params.slug;
@@ -90,11 +97,41 @@ class ArticleEditor extends React.Component {
         }
     }
 
+    onAutoSave = async () => {
+        if (this.state.editorStateSnapshot !== this.state.value) {
+            console.log('AutoSave triggered');
+            const articleInput = this.populateArticle();
+            const { data } = await this.props.client.mutate({
+                mutation: UPDATE_ARTICLE,
+                variables: {
+                    article: articleInput
+                }
+            });
+            this.props.enqueueSnackbar(
+                `Auto saved on ${data.updateArticle.updatedAt}`
+            );
+            this.setState({
+                editorStateSnapshot: this.state.value
+            });
+        }
+        console.log('End of auto save');
+    };
+
     onChange = ({ value }) => {
         this.setState({ value });
     };
 
-    onSubmit = createOrUpdateArticle => {
+    onSave = createOrUpdateArticle => {
+        const articleInput = this.populateArticle();
+        articleInput.isDraft = true;
+        createOrUpdateArticle({ variables: { article: articleInput } });
+    };
+
+    componentWillUnmount() {
+        clearInterval(this.state.intervalId);
+    }
+
+    populateArticle = () => {
         const titleNode = this.state.value.document.getBlocks().get(0);
         const summaryNode = this.state.value.document.getBlocks().get(1);
         const newValue = this.state.value
@@ -112,16 +149,36 @@ class ArticleEditor extends React.Component {
         if (this.slug) {
             articleInput.slug = this.slug;
         }
+
+        return articleInput;
+    };
+
+    onSubmit = createOrUpdateArticle => {
+        const articleInput = this.populateArticle();
+        articleInput.isDraft = false;
         createOrUpdateArticle({ variables: { article: articleInput } });
     };
 
-    onSubmitedSuccess = ({ createArticle }) => {
-        const slug = this.slug ? this.slug : createArticle.slug;
-        this.props.history.replace(`/articles/${slug}`);
+    onSubmitedSuccess = ({ createArticle, updateArticle }) => {
+        const result = createArticle || updateArticle;
+        const slug = this.slug ? this.slug : result.slug;
+        if (result.isDraft) {
+            this.slug = slug;
+            this.props.enqueueSnackbar('Successfully saved.');
+            this.setState({
+                editorStateSnapshot: this.state.value
+            });
+            const intervalId = setInterval(this.onAutoSave, 10000);
+            this.setState({
+                intervalId
+            });
+        } else {
+            this.props.history.replace(`/articles/${slug}`);
+        }
     };
 
     refreshQueries = () => {
-        let queriesToRefetch = [REFRESH_ARTICLE_LIST];
+        let queriesToRefetch = [Reload_Articles, Reload_Drafts];
 
         if (this.slug) {
             // need to refresh in update scenario
@@ -189,6 +246,7 @@ class ArticleEditor extends React.Component {
         return (
             <div>
                 <div className={styles.leftSpace} />
+
                 <Paper className={styles.paper} elevation={1}>
                     <div className={styles.editor}>
                         <RichTextEditor
@@ -199,7 +257,7 @@ class ArticleEditor extends React.Component {
                     </div>
 
                     <Mutation
-                        mutation={this.slug ? UPDATE_ARTICLE : CREAT_ARTICLE}
+                        mutation={this.slug ? UPDATE_ARTICLE : CREATE_ARTICLE}
                         onCompleted={this.onSubmitedSuccess}
                         awaitRefetchQueries={true}
                         refetchQueries={this.refreshQueries}
@@ -219,13 +277,17 @@ class ArticleEditor extends React.Component {
                                 >
                                     Publish
                                 </StatefulButton>
-                                <Button
+                                <StatefulButton
+                                    loading={loading}
+                                    loadingSize={20}
                                     variant="contained"
-                                    onClick={this.onSubmit}
+                                    onClick={e =>
+                                        this.onSave(createOrUpdateArticle)
+                                    }
                                     color="secondary"
                                 >
                                     Save
-                                </Button>
+                                </StatefulButton>
                             </div>
                         )}
                     </Mutation>
@@ -236,4 +298,4 @@ class ArticleEditor extends React.Component {
     }
 }
 
-export default withApollo(withRouter(ArticleEditor));
+export default withApollo(withRouter(withSnackbar(ArticleEditor)));

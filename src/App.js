@@ -43,9 +43,14 @@ const AsyncArticleDetail = Loadable({
 });
 
 const AsyncArticleList = Loadable({
-    loader: () => import('./pages/articles/articlesList'),
+    loader: () => import('./pages/articles/homepage'),
     loading: CircularProgress
 });
+
+const AsyncDraftList = Loadable({
+    loader: () => import('./pages/articles/drafts'),
+    loading: CircularProgress
+})
 
 const AsyncLogin = Loadable({
     loader: () => import('./pages/auth/login'),
@@ -146,6 +151,12 @@ class App extends React.Component {
                                 exact
                                 path="/articles/editor/"
                                 component={AsyncArticleEditor}
+                            />
+                            <AsyncPrivateRoute
+                                isLoggedIn={this.state.isLoggedIn}
+                                exact
+                                path="/drafts"
+                                component={AsyncDraftList}
                             />
                             <AsyncPrivateRoute
                                 isLoggedIn={this.state.isLoggedIn}

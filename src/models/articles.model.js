@@ -3,4 +3,5 @@ export class ArticleInput {
     body = '';
     jsonBody = '';
     summary = '';
+    isDraft = true;
 }
