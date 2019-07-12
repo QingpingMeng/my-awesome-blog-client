@@ -9,6 +9,13 @@ import { Helmet } from 'react-helmet';
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import Redirect from 'react-router/Redirect';
+import { withErrorBoundary } from './components/withErrorBoundary';
+
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({
+    dsn: 'https://5f9d3f665ab3421696ab5c5c63945c21@sentry.io/1308609'
+});
 
 const CURRENT_USER = gql`
     {
@@ -36,9 +43,14 @@ const AsyncArticleDetail = Loadable({
 });
 
 const AsyncArticleList = Loadable({
-    loader: () => import('./pages/articles/articlesList'),
+    loader: () => import('./pages/articles/homepage'),
     loading: CircularProgress
 });
+
+const AsyncDraftList = Loadable({
+    loader: () => import('./pages/articles/drafts'),
+    loading: CircularProgress
+})
 
 const AsyncLogin = Loadable({
     loader: () => import('./pages/auth/login'),
@@ -142,6 +154,12 @@ class App extends React.Component {
                             />
                             <AsyncPrivateRoute
                                 isLoggedIn={this.state.isLoggedIn}
+                                exact
+                                path="/drafts"
+                                component={AsyncDraftList}
+                            />
+                            <AsyncPrivateRoute
+                                isLoggedIn={this.state.isLoggedIn}
                                 path="/articles/editor/:slug"
                                 component={AsyncArticleEditor}
                             />
@@ -165,4 +183,4 @@ class App extends React.Component {
     }
 }
 
-export default withApollo(App);
+export default withErrorBoundary(withApollo(App));

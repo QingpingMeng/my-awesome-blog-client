@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StatefullButton from '../Button/statefulButton';
-import REFRESH_ARTICLE_LIST from '../../lib/queries/refreshList';
+import {Reload_Articles, Reload_Drafts} from '../../lib/queries/refreshList';
 
 const DELETE_ARTICLE = gql`
     mutation DeleteArticle($slug: String!) {
@@ -81,7 +81,7 @@ class DeleteArticle extends Component {
                 mutation={DELETE_ARTICLE}
                 onCompleted={this.props.onDeleted}
                 awaitRefetchQueries={true}
-                refetchQueries={() => [REFRESH_ARTICLE_LIST]}
+                refetchQueries={() => [Reload_Articles, Reload_Drafts]}
                 variables={{ slug: this.props.slug }}
             >
                 {(deleteArticle, { data, loading }) => (

@@ -7,6 +7,7 @@ import { ApolloProvider } from 'react-apollo';
 import registerServiceWorker from './registerServiceWorker';
 import JssProvider from 'react-jss/lib/JssProvider';
 import initApollo from './lib/init-apollo';
+import { SnackbarProvider } from 'notistack';
 import {
     MuiThemeProvider,
     createMuiTheme,
@@ -51,7 +52,9 @@ export const app = (
         <BrowserRouter>
             <JssProvider generateClassName={generateClassName}>
                 <MuiThemeProvider theme={theme}>
-                    <ClientEntry />
+                    <SnackbarProvider maxSnack={1}>
+                        <ClientEntry />
+                    </SnackbarProvider>
                 </MuiThemeProvider>
             </JssProvider>
         </BrowserRouter>

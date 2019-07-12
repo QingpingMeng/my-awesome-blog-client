@@ -36,15 +36,26 @@ class UserInfo extends React.Component {
                     }
 
                     return (
-                        <Button
-                            color="secondary"
-                            size="medium"
-                            onClick={() => {
-                                this.props.history.push('/articles/editor');
-                            }}
-                        >
-                            New Post
-                        </Button>
+                        <>
+                            <Button
+                                color="secondary"
+                                size="medium"
+                                onClick={() => {
+                                    this.props.history.push('/articles/editor');
+                                }}
+                            >
+                                New Post
+                            </Button>
+                            <Button
+                                color="secondary"
+                                size="medium"
+                                onClick={() => {
+                                    this.props.history.push('/drafts');
+                                }}
+                            >
+                                Drafts
+                            </Button>
+                        </>
                     );
                 }}
             </Query>

@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
 import ArticlePreview from '../../components/Articles/articlePreview';
 import { LinearProgress } from '@material-ui/core';
 import * as styles from './articlesList.module.css';
@@ -8,18 +7,6 @@ import { withRouter } from 'react-router';
 import StatefullButton from '../../components/Button/statefulButton';
 import { Helmet } from 'react-helmet';
 
-export const PAGE_LIMIT = 10;
-
-export const LIST_ARTICLES = gql`
-    query ListArticles($limit: Int, $offset: Int) {
-        queryArticles(limit: $limit, offset: $offset) {
-            slug
-            title
-            summary
-            createdAt
-        }
-    }
-`;
 
 class ArticlesList extends Component {
     constructor(props) {
@@ -41,9 +28,9 @@ class ArticlesList extends Component {
                     <title>Qingping Meng - All articles</title>
                 </Helmet>
                 <Query
-                    query={LIST_ARTICLES}
+                    query={this.props.query}
                     notifyOnNetworkStatusChange={true}
-                    variables={{ offset: 0, limit: PAGE_LIMIT }}
+                    variables={{ condition: JSON.stringify(this.props.condition), offset: 0, limit: this.props.pageLimit }}
                 >
                     {({ loading, data, error, fetchMore, networkStatus }) => {
                         const loadingMore = networkStatus === 3;

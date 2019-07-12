@@ -79,7 +79,7 @@ class ArticleDetail extends Component {
                         );
                     }
 
-                    if (error) {
+                    if (error || !data.queryArticle) {
                         return (
                             <div
                                 style={{
