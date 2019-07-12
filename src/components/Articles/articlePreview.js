@@ -9,10 +9,18 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import 'github-markdown-css';
 import styled from 'styled-components';
+import { Button } from '@material-ui/core';
 
 const PlainLink = styled(Link)`
     color: inherit;
     text-decoration: none;
+`;
+
+const Overlay = styled.div`
+    right: 1rem;
+    top: 1rem;
+    position: absolute;
+    z-index: 1;
 `;
 
 export default class ArticlePreview extends Component {
@@ -20,6 +28,9 @@ export default class ArticlePreview extends Component {
         return (
             <Card raised={false}>
                 <CardContent>
+                    <Typography align="right" color="textSecondary">
+                        {moment(this.props.createdAt).fromNow()}
+                    </Typography>
                     <Typography
                         variant="title"
                         style={{ fontWeight: '600' }}
@@ -31,10 +42,7 @@ export default class ArticlePreview extends Component {
                     </Typography>
                 </CardContent>
 
-                <CardActionArea
-                    onClick={this.props.onReadMore}
-                    style={{ width: '100%' }}
-                >
+                <CardActionArea style={{ width: '100%' }}>
                     <CardContent>
                         <Typography
                             gutterBottom={true}
@@ -44,10 +52,17 @@ export default class ArticlePreview extends Component {
                             {this.props.summary ||
                                 `This article doesn't have any summary.`}
                         </Typography>
-                        <Typography align="right" color="textSecondary">
-                            {moment(this.props.createdAt).fromNow()}
-                        </Typography>
                     </CardContent>
+                    <Overlay>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            to={`/articles/${this.props.slug}`}
+                            component={PlainLink}
+                        >
+                            Read
+                        </Button>
+                    </Overlay>
                 </CardActionArea>
             </Card>
         );
