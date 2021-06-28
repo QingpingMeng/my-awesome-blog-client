@@ -19,7 +19,7 @@
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "notistack": "^0.4.1",
-    "prismjs": "^1.15.0",
+    "prismjs": "^1.24.0",
     "query-string": "^6.1.0",
     "react": "^16.4.2",
     "react-apollo": "^2.1.11",
