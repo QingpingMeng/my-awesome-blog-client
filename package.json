@@ -12,7 +12,7 @@
     "apollo-link-state": "^0.4.1",
     "canner-slate-editor": "git+https://github.com/QingpingMeng/canner-slate-editor.git",
     "es6-promise": "^4.2.4",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "flow-bin": "^0.79.1",
     "graphql": "^14.0.2",
     "immutable": "^3.8.2",
